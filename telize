@@ -1,0 +1,87 @@
+###############################################################################
+#                                                                             #
+# Telize 1.00 (c) by Frederic Cambus 2013                                     #
+# http://www.telize.com                                                       #
+#                                                                             #
+# Created: 2013/08/15                                                         #
+# Last Updated: 2013/08/21                                                    #
+#                                                                             #
+# Telize is released under the BSD 3-Clause license.                          #
+# See LICENSE file for details.                                               #
+#                                                                             #
+###############################################################################
+
+server {
+	server_name 127.0.0.1;
+
+	keepalive_timeout 0;
+	gzip off;
+
+	location /ip
+	{
+		charset off;
+		default_type text/plain;
+
+		echo $remote_addr;
+	}
+
+	location /jsonip
+	{
+		echo_exec /jsonify ip=$remote_addr&callback=$arg_callback;
+	}
+
+	rewrite ^/geoip$ /geoip/ last; 
+
+	location ~ /geoip/(?<ip>.*) {
+		if ($ip = "")
+		{
+			set $ip $remote_addr;
+		}
+
+		proxy_set_header X-Real-IP $ip;
+		proxy_pass $scheme://127.0.0.1/localize?callback=$arg_callback;
+	}
+
+	location /localize {
+		set_real_ip_from 127.0.0.1;
+
+		echo_exec /jsonify ip=$remote_addr&country_code=$geoip_city_country_code&country_code3=$geoip_city_country_code3&country=$geoip_city_country_name&region_code=$geoip_region&region=$geoip_region_name&city=$geoip_city&postal_code=$geoip_postal_code&continent_code=$geoip_city_continent_code&latitude=$geoip_latitude&longitude=$geoip_longitude&dma_code=$geoip_dma_code&area_code=$geoip_area_code&callback=$arg_callback;
+	}
+
+	location /jsonify {
+		charset iso-8859-1;
+		default_type application/json;
+
+		content_by_lua '
+			local cjson = require("cjson")
+
+			local ip = ngx.var.arg_ip
+			local country_code = ngx.var.arg_country_code ~= "" and ngx.var.arg_country_code or nil
+			local country_code3 = ngx.var.arg_country_code3 ~= "" and ngx.var.arg_country_code3 or nil
+			local country = ngx.var.arg_country ~= "" and ngx.var.arg_country or nil
+			local region = ngx.var.arg_region ~= "" and ngx.var.arg_region or nil
+			local region_code = ngx.var.arg_region_code ~= "" and ngx.var.arg_region_code or nil
+			local city = ngx.var.arg_city ~= "" and ngx.var.arg_city or nil
+			local postal_code = ngx.var.arg_postal_code ~= "" and ngx.var.arg_postal_code or nil
+			local continent_code = ngx.var.arg_continent_code ~= "" and ngx.var.arg_continent_code or nil
+			local latitude = ngx.var.arg_latitude ~= "" and tonumber(ngx.var.arg_latitude) or nil
+			local longitude = ngx.var.arg_longitude ~= "" and tonumber(ngx.var.arg_longitude) or nil
+			local dma_code = ngx.var.arg_dma_code ~= "" and ngx.var.arg_dma_code or nil
+			local area_code = ngx.var.arg_area_code ~= "" and ngx.var.arg_area_code or nil
+			local callback = ngx.var.arg_callback
+
+			if ip == "127.0.0.1" then
+				ngx.status = ngx.HTTP_BAD_REQUEST
+				ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
+				ngx.exit(ngx.HTTP_OK)
+			end
+
+			json = cjson.encode({ip = ip, country_code = country_code, country_code3 = country_code3, country = country, region_code = region_code, region = region, city = city, postal_code = postal_code, continent_code = continent_code, latitude = latitude, longitude = longitude, dma_code = dma_code, area_code = area_code})
+
+			if callback ~= "" then
+				ngx.say(callback, "(", json, ");")
+			else
+				ngx.say(json)
+			end';
+	}
+}
