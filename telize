@@ -49,6 +49,8 @@ server {
 	}
 
 	location /jsonify {
+		access_log off;
+		
 		charset iso-8859-1;
 		default_type application/json;
 
