@@ -54,7 +54,7 @@ server {
 		charset iso-8859-1;
 		default_type application/json;
 
-		if ($geoip_org ~* "^(AS[0-9]+) (.+)") {
+		if ($arg_org ~* "^(AS[0-9]+) (.+)") {
 			set $asn $1;
 			set $isp $2;
 		}
