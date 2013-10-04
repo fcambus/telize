@@ -57,19 +57,19 @@ files, within the http block.
 
 		geoip_country  /usr/share/GeoIP/GeoIP.dat;
 		geoip_city     /usr/share/GeoIP/GeoLiteCity.dat;
-    geoip_org      /usr/share/GeoIP/GeoIPASNum.dat;
+		geoip_org      /usr/share/GeoIP/GeoIPASNum.dat;
 	}
 
 ### For IPv4 and IPv6 support (requires at least Nginx 1.3.12) :
 
-  http {
+	http {
 
-    ...
+		...
 
-    geoip_country  /usr/share/GeoIP/GeoIPv6.dat;
-    geoip_city     /usr/share/GeoIP/GeoLiteCityv6.dat;
-    geoip_org      /usr/share/GeoIP/GeoIPASNumv6.dat;
-  }
+		geoip_country  /usr/share/GeoIP/GeoIPv6.dat;
+		geoip_city     /usr/share/GeoIP/GeoLiteCityv6.dat;
+		geoip_org      /usr/share/GeoIP/GeoIPASNumv6.dat;
+	}
 
 Then deploy the API configuration file `telize` to the appropriate location on
 your system, and reload Nginx configuration.
