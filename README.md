@@ -46,14 +46,18 @@ Installing via LuaRocks :
 
 ## Installation
 
-Edit `nginx.conf` to add directives specifying the path to the GeoIP database
-files, within the http block.
+Copy `timezone.conf` in the Nginx configuration files directory.
+
+Edit `nginx.conf` to include `timezone.conf` and to add directives specifying
+the path to the GeoIP database files, within the http block.
 
 ### For IPv4 support only :
 
 	http {
 
 		...
+
+		include        /etc/nginx/timezone.conf;
 
 		geoip_country  /usr/share/GeoIP/GeoIP.dat;
 		geoip_city     /usr/share/GeoIP/GeoLiteCity.dat;
@@ -65,6 +69,8 @@ files, within the http block.
 	http {
 
 		...
+
+		include        /etc/nginx/timezone.conf;
 
 		geoip_country  /usr/share/GeoIP/GeoIPv6.dat;
 		geoip_city     /usr/share/GeoIP/GeoLiteCityv6.dat;
