@@ -62,34 +62,44 @@ server {
 		content_by_lua '
 			local cjson = require("cjson")
 
-			local ip = ngx.var.arg_ip
-			local country_code = ngx.var.arg_country_code ~= "" and ngx.var.arg_country_code or nil
-			local country_code3 = ngx.var.arg_country_code3 ~= "" and ngx.var.arg_country_code3 or nil
-			local country = ngx.var.arg_country ~= "" and ngx.var.arg_country or nil
-			local region = ngx.var.arg_region ~= "" and ngx.var.arg_region or nil
-			local region_code = ngx.var.arg_region_code ~= "" and ngx.var.arg_region_code or nil
-			local city = ngx.var.arg_city ~= "" and ngx.var.arg_city or nil
-			local postal_code = ngx.var.arg_postal_code ~= "" and ngx.var.arg_postal_code or nil
-			local continent_code = ngx.var.arg_continent_code ~= "" and ngx.var.arg_continent_code or nil
-			local latitude = ngx.var.arg_latitude ~= "" and tonumber(ngx.var.arg_latitude) or nil
-			local longitude = ngx.var.arg_longitude ~= "" and tonumber(ngx.var.arg_longitude) or nil
-			local dma_code = ngx.var.arg_dma_code ~= "" and ngx.var.arg_dma_code or nil
-			local area_code = ngx.var.arg_area_code ~= "" and ngx.var.arg_area_code or nil
-			local timezone = ngx.var.arg_timezone ~= "" and ngx.var.arg_timezone or nil
-			local asn = ngx.var.asn ~= "" and ngx.var.asn or nil
-			local isp = ngx.var.isp ~= "" and ngx.var.isp or nil
-			local callback = ngx.var.arg_callback
+			local args = {
+				ip = ngx.var.arg_ip,
+				country_code = ngx.var.arg_country_code,
+				country_code3 = ngx.var.arg_country_code3,
+				country = ngx.var.arg_country,
+				region = ngx.var.arg_region,
+				region_code = ngx.var.arg_region_code,
+				city = ngx.var.arg_city,
+				postal_code = ngx.var.arg_postal_code,
+				continent_code = ngx.var.arg_continent_code,
+				latitude = ngx.var.arg_latitude,
+				longitude = ngx.var.arg_longitude,
+				dma_code = ngx.var.arg_dma_code,
+				area_code = ngx.var.arg_area_code,
+				timezone = ngx.var.arg_timezone,
+				asn = ngx.var.asn,
+				isp = ngx.var.isp,
+			}
 
-			if ip == "127.0.0.1" then
+			-- validate args
+			for item, value in pairs(args) do
+				if args[item] == "" then
+					args[item] = nil
+				elseif item == "latitude" or item == "latitude" then
+					args[item] = tonumber(value)
+				end
+			end
+
+			if args["ip"] == "127.0.0.1" then
 				ngx.status = ngx.HTTP_BAD_REQUEST
 				ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
 				ngx.exit(ngx.HTTP_OK)
 			end
 
-			json = cjson.encode({ip = ip, country_code = country_code, country_code3 = country_code3, country = country, region_code = region_code, region = region, city = city, postal_code = postal_code, continent_code = continent_code, latitude = latitude, longitude = longitude, dma_code = dma_code, area_code = area_code, asn = asn, isp = isp, timezone = timezone})
+			local json = cjson.encode(args)
 
-			if callback ~= "" then
-				ngx.say(callback, "(", json, ");")
+			if ngx.var.callback then
+				ngx.say(ngx.var.callback, "(", json, ");")
 			else
 				ngx.say(json)
 			end';
