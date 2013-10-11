@@ -1,3 +1,12 @@
+Telize 1.01 (2013-10-11)
+
+- Adding support for Timezones
+- Adding support for GeoIP ASN database
+- Enforcing strictly defined URL endpoints
+- Prevent logging of internal redirects 
+
+
+
 Telize 1.00 (2013-08-21)
 
 - Initial release
