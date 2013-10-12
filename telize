@@ -85,7 +85,7 @@ server {
 			for item, value in pairs(args) do
 				if args[item] == "" then
 					args[item] = nil
-				elseif item == "latitude" or item == "latitude" then
+				elseif item == "longitude" or item == "latitude" then
 					args[item] = tonumber(value)
 				end
 			end
