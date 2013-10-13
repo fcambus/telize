@@ -81,11 +81,11 @@ server {
 				isp = ngx.var.isp,
 			}
 
-			-- validate args
+			-- Validate args
 			for item, value in pairs(args) do
 				if args[item] == "" then
 					args[item] = nil
-				elseif item == "longitude" or item == "latitude" then
+				elseif item == "latitude" or item == "longitude" then
 					args[item] = tonumber(value)
 				end
 			end
@@ -98,8 +98,8 @@ server {
 
 			local json = cjson.encode(args)
 
-			if ngx.var.callback then
-				ngx.say(ngx.var.callback, "(", json, ");")
+			if ngx.var.arg_callback then
+				ngx.say(ngx.var.arg_callback, "(", json, ");")
 			else
 				ngx.say(json)
 			end';
