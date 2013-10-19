@@ -44,6 +44,28 @@ Installing via LuaRocks :
 
 	luarocks install lua-cjson
 
+### GeoIP databases
+
+Telize requires the free GeoLite databases : http://dev.maxmind.com/geoip/legacy/geolite/
+
+#### For IPv4 support only :
+
+	mkdir -p /usr/share/GeoIP
+	cd /usr/share/GeoIP
+	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+	wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz
+	gunzip *gz
+
+#### For IPv4 and IPv6 support :
+
+	mkdir -p /usr/share/GeoIP
+	cd /usr/share/GeoIP
+	wget http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz
+	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
+	wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNumv6.dat.gz
+	gunzip *gz
+
 ## Installation
 
 Copy `timezone.conf` in the Nginx configuration files directory.
@@ -51,7 +73,7 @@ Copy `timezone.conf` in the Nginx configuration files directory.
 Edit `nginx.conf` to include `timezone.conf` and to add directives specifying
 the path to the GeoIP database files, within the http block.
 
-### For IPv4 support only :
+#### For IPv4 support only :
 
 	http {
 
@@ -64,7 +86,7 @@ the path to the GeoIP database files, within the http block.
 		geoip_org      /usr/share/GeoIP/GeoIPASNum.dat;
 	}
 
-### For IPv4 and IPv6 support (requires at least Nginx 1.3.12) :
+#### For IPv4 and IPv6 support (requires at least Nginx 1.3.12) :
 
 	http {
 
