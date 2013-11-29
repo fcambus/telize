@@ -4,7 +4,7 @@
 # http://www.telize.com                                                       #
 #                                                                             #
 # Created: 2013/08/15                                                         #
-# Last Updated: 2013/10/11                                                    #
+# Last Updated: 2013/11/29                                                    #
 #                                                                             #
 # Telize is released under the BSD 3-Clause license.                          #
 # See LICENSE file for details.                                               #
@@ -62,6 +62,8 @@ server {
 		content_by_lua '
 			local cjson = require("cjson")
 
+			local callback = ngx.var.arg_callback
+
 			local args = {
 				ip = ngx.var.arg_ip,
 				country_code = ngx.var.arg_country_code,
@@ -78,7 +80,7 @@ server {
 				area_code = ngx.var.arg_area_code,
 				timezone = ngx.var.arg_timezone,
 				asn = ngx.var.asn,
-				isp = ngx.var.isp,
+				isp = ngx.var.isp
 			}
 
 			-- Validate args
@@ -98,8 +100,8 @@ server {
 
 			local json = cjson.encode(args)
 
-			if ngx.var.arg_callback then
-				ngx.say(ngx.var.arg_callback, "(", json, ");")
+			if callback ~= "" then
+				ngx.say(callback, "(", json, ");")
 			else
 				ngx.say(json)
 			end';
