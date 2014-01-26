@@ -39,6 +39,7 @@ server {
 		}
 
 		proxy_set_header X-Real-IP $ip;
+		proxy_set_header Host $host;
 		proxy_pass $scheme://127.0.0.1/localize?callback=$arg_callback;
 	}
 
