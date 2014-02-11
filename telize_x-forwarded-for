@@ -1,0 +1,115 @@
+###############################################################################
+#                                                                             #
+# Telize 1.01 (c) by Frederic Cambus 2013, modified by Yann Verry             #
+# http://www.telize.com                                                       #
+#                                                                             #
+# Created: 2013/08/15                                                         #
+# Last Updated: 2013/11/29                                                    #
+# Modified: 2014/02/11							      #
+#                                                                             #
+# Telize is released under the BSD 3-Clause license.                          #
+# See LICENSE file for details.                                               #
+#                                                                             #
+###############################################################################
+
+server {
+	server_name 127.0.0.1;
+
+	# use real IP
+	set_real_ip_from 10.0.0.0/8; # Put your LB network here
+	real_ip_header  X-Forwarded-For;
+
+	keepalive_timeout 0;
+	gzip off;
+
+	location ~ /ip$
+	{
+		charset off;
+		default_type text/plain;
+
+		echo $remote_addr;
+	}
+
+	location ~ /jsonip$
+	{
+		echo_exec /jsonify ip=$remote_addr&callback=$arg_callback;
+	}
+
+	rewrite ^/geoip$ /geoip/ last; 
+
+	location ~ /geoip/(?<ip>.*) {
+		if ($ip = "")
+		{
+			set $ip $remote_addr;
+		}
+
+		proxy_set_header X-Forwarded-For $ip;
+		proxy_set_header Host $host;
+		proxy_pass $scheme://127.0.0.1/localize?callback=$arg_callback;
+	}
+
+	location /localize {
+		set_real_ip_from 127.0.0.1;
+
+		echo_exec /jsonify ip=$remote_addr&country_code=$geoip_city_country_code&country_code3=$geoip_city_country_code3&country=$geoip_city_country_name&region_code=$geoip_region&region=$geoip_region_name&city=$geoip_city&postal_code=$geoip_postal_code&continent_code=$geoip_city_continent_code&latitude=$geoip_latitude&longitude=$geoip_longitude&dma_code=$geoip_dma_code&area_code=$geoip_area_code&org=$geoip_org&timezone=$geoip_timezone&callback=$arg_callback;
+	}
+
+	location /jsonify {
+		access_log off;
+
+		charset iso-8859-1;
+		default_type application/json;
+
+		if ($arg_org ~* "^(AS[0-9]+) (.+)") {
+			set $asn $1;
+			set $isp $2;
+		}
+
+		content_by_lua '
+			local cjson = require("cjson")
+
+			local callback = ngx.var.arg_callback
+
+			local args = {
+				ip = ngx.var.arg_ip,
+				country_code = ngx.var.arg_country_code,
+				country_code3 = ngx.var.arg_country_code3,
+				country = ngx.var.arg_country,
+				region = ngx.var.arg_region,
+				region_code = ngx.var.arg_region_code,
+				city = ngx.var.arg_city,
+				postal_code = ngx.var.arg_postal_code,
+				continent_code = ngx.var.arg_continent_code,
+				latitude = ngx.var.arg_latitude,
+				longitude = ngx.var.arg_longitude,
+				dma_code = ngx.var.arg_dma_code,
+				area_code = ngx.var.arg_area_code,
+				timezone = ngx.var.arg_timezone,
+				asn = ngx.var.asn,
+				isp = ngx.var.isp
+			}
+
+			-- Validate args
+			for item, value in pairs(args) do
+				if args[item] == "" then
+					args[item] = nil
+				elseif item == "latitude" or item == "longitude" then
+					args[item] = tonumber(value)
+				end
+			end
+
+			if args["ip"] == "127.0.0.1" then
+				ngx.status = ngx.HTTP_BAD_REQUEST
+				ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
+				ngx.exit(ngx.HTTP_OK)
+			end
+
+			local json = cjson.encode(args)
+
+			if callback ~= "" then
+				ngx.say(callback, "(", json, ");")
+			else
+				ngx.say(json)
+			end';
+	}
+}
