@@ -30,9 +30,7 @@ server {
 		echo_exec /jsonify ip=$remote_addr&callback=$arg_callback;
 	}
 
-	rewrite ^/geoip$ /geoip/ last; 
-
-	location ~ /geoip/(?<ip>.*) {
+	location ~ /geoip/?(?<ip>.*) {
 		if ($ip = "")
 		{
 			set $ip $remote_addr;
