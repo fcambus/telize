@@ -100,7 +100,7 @@ the path to the GeoIP database files, within the http block.
 	}
 
 Then deploy the API configuration file `telize` to the appropriate location on
-your system, and reload Nginx configuration.
+your system, and reload Nginx configuration. If you are behind load balancer use `telize_x-forwarded-for` file. 
 
 ## Usage 
 
