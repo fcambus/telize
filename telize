@@ -44,7 +44,7 @@ server {
 	location /localize {
 		set_real_ip_from 127.0.0.1;
 
-		echo_exec /jsonify ip=$remote_addr&country_code=$geoip_city_country_code&country_code3=$geoip_city_country_code3&country=$geoip_city_country_name&region_code=$geoip_region&region=$geoip_region_name&city=$geoip_city&postal_code=$geoip_postal_code&continent_code=$geoip_city_continent_code&latitude=$geoip_latitude&longitude=$geoip_longitude&dma_code=$geoip_dma_code&area_code=$geoip_area_code&org=$geoip_org&timezone=$geoip_timezone&callback=$arg_callback;
+		echo_exec /jsonify ip=$remote_addr&country_code=$geoip_city_country_code&country_code3=$geoip_city_country_code3&country=$geoip_city_country_name&region_code=$geoip_region&region=$geoip_region_name&city=$geoip_city&postal_code=$geoip_postal_code&continent_code=$geoip_city_continent_code&latitude=$geoip_latitude&longitude=$geoip_longitude&dma_code=$geoip_dma_code&area_code=$geoip_area_code&org=$geoip_org&timezone=$geoip_timezone&offset=$geoip_timezone_offset&callback=$arg_callback;
 	}
 
 	location /jsonify {
@@ -78,6 +78,7 @@ server {
 				dma_code = ngx.var.arg_dma_code,
 				area_code = ngx.var.arg_area_code,
 				timezone = ngx.var.arg_timezone,
+				offset = ngx.var.arg_offset,
 				asn = ngx.var.asn,
 				isp = ngx.var.isp
 			}
