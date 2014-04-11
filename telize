@@ -79,6 +79,7 @@ server {
 				area_code = ngx.var.arg_area_code,
 				timezone = ngx.var.arg_timezone,
 				offset = ngx.var.arg_offset,
+				lag = ngx.var.arg_offset,
 				asn = ngx.var.asn,
 				isp = ngx.var.isp
 			}
