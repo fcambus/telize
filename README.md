@@ -39,10 +39,11 @@ modules compiled-in.
 Telize requires the following Lua module :
 
 - Lua CJSON 
+- Lua iconv
 
 Installing via LuaRocks : 
 
-	luarocks install lua-cjson
+	luarocks install lua-cjson lua-iconv
 
 ### GeoIP databases
 

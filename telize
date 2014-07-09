@@ -67,7 +67,7 @@ location /localize-country {
 	location /jsonify {
 		access_log off;
 
-		charset iso-8859-1;
+		charset utf8;
 		default_type application/json;
 
 		if ($arg_org ~* "^(AS[0-9]+) (.+)") {
@@ -76,7 +76,9 @@ location /localize-country {
 		}
 
 		content_by_lua '
-			local cjson = require("cjson")
+      local cjson = require("cjson")
+      local iconv = require("iconv")
+      local cd = iconv.new("utf-8","iso-8859-15")
 
 			local callback = ngx.var.arg_callback
 
@@ -87,7 +89,7 @@ location /localize-country {
 				country = ngx.var.arg_country,
 				region = ngx.var.arg_region,
 				region_code = ngx.var.arg_region_code,
-				city = ngx.var.arg_city,
+				city = cd:iconv(ngx.var.arg_city),
 				postal_code = ngx.var.arg_postal_code,
 				continent_code = ngx.var.arg_continent_code,
 				latitude = ngx.var.arg_latitude,
