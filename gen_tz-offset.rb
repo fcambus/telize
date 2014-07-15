@@ -7,7 +7,8 @@
 require 'tzinfo'
 
 # open file
-tz_hdl = File.new('tz_offset.conf','w')
+tz_hdl = File.new('timezone-offset.conf','w')
+
 # header
 tz_hdl.write("map $geoip_timezone $geoip_timezone_offset {\n")
 

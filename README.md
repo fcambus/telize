@@ -68,10 +68,9 @@ Telize requires the free GeoLite databases : http://dev.maxmind.com/geoip/legacy
 
 ## Installation
 
-Copy `timezone.conf` in the Nginx configuration files directory.
+Copy `timezone.conf` and `timezone-offset.conf` in the Nginx configuration files directory.
 
-Edit `nginx.conf` to include `timezone.conf` and to add directives specifying
-the path to the GeoIP database files, within the http block.
+Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add directives specifying the path to the GeoIP database files, within the http block.
 
 #### For IPv4 support only :
 
