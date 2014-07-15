@@ -100,7 +100,23 @@ the path to the GeoIP database files, within the http block.
 	}
 
 Then deploy the API configuration file `telize` to the appropriate location on
-your system, and reload Nginx configuration. If you are behind load balancer use `telize_x-forwarded-for` file. 
+your system, and reload Nginx configuration. If you are behind a load balancer, read the next section.
+
+## Telize and Load Balancers
+
+
+When using Telize behind a load balancer, uncomment the following directives in the server block and set the load balancer IP range accordingly :
+
+	# set_real_ip_from 10.0.0.0/8; # Put your load balancer IP range here
+	# real_ip_header X-Forwarded-For;
+
+In the `/geoip` location, replace this directive :
+
+	proxy_set_header X-Real-IP $ip;
+
+By the following directive :
+
+	proxy_set_header X-Forwarded-For $ip;
 
 ## Usage 
 
