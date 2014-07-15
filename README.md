@@ -79,6 +79,7 @@ Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add 
 		...
 
 		include        /etc/nginx/timezone.conf;
+		include        /etc/nginx/timezone-offset.conf;
 
 		geoip_country  /usr/share/GeoIP/GeoIP.dat;
 		geoip_city     /usr/share/GeoIP/GeoLiteCity.dat;
@@ -92,6 +93,7 @@ Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add 
 		...
 
 		include        /etc/nginx/timezone.conf;
+		include        /etc/nginx/timezone-offset.conf;
 
 		geoip_country  /usr/share/GeoIP/GeoIPv6.dat;
 		geoip_city     /usr/share/GeoIP/GeoLiteCityv6.dat;
@@ -100,6 +102,12 @@ Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add 
 
 Then deploy the API configuration file `telize` to the appropriate location on
 your system, and reload Nginx configuration. If you are behind a load balancer, read the next section.
+
+Depending on existing configuration, the `map_hash_max_size` and `map_hash_bucket_size` sizes might be set too low and Nginx will refuse to start. If this happens, please add the following directives in the `http` block.
+
+	map_hash_max_size 8192;
+	map_hash_bucket_size 64;
+
 
 ## Telize and Load Balancers
 
