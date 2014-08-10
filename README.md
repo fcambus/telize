@@ -108,6 +108,11 @@ Depending on existing configuration, the `map_hash_max_size` and `map_hash_bucke
 	map_hash_max_size 8192;
 	map_hash_bucket_size 64;
 
+There is an automatic install script for Debian :
+
+	sh install/debian.sh
+
+Lastly, if your Telize instance produces lots of logs, this might be of interest : [Log rotation directly within Nginx configuration file](http://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/).
 
 ## Telize and Load Balancers
 
