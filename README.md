@@ -43,7 +43,8 @@ Telize requires the following Lua module :
 
 Installing via LuaRocks : 
 
-	luarocks install lua-cjson lua-iconv
+	luarocks install lua-cjson
+	luarocks install lua-iconv
 
 ### GeoIP databases
 

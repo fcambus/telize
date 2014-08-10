@@ -60,7 +60,7 @@ server {
 	location /jsonify {
 		access_log off;
 
-		charset utf8;
+		charset utf-8;
 		default_type application/json;
 
 		if ($arg_org ~* "^(AS[0-9]+) (.+)") {
