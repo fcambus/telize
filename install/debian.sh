@@ -4,6 +4,7 @@ apt-get update
 apt-get install -t wheezy-backports nginx-extras 
 apt-get install luarocks
 luarocks install lua-cjson
+luarocks install lua-iconv
 
 # Copying Telize configuration and enabling it
 cp *.conf /etc/nginx/
