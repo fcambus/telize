@@ -4,7 +4,7 @@
 # http://www.telize.com                                                       #
 #                                                                             #
 # Created: 2013/08/15                                                         #
-# Last Updated: 2014/07/15                                                    #
+# Last Updated: 2014/07/18                                                    #
 #                                                                             #
 # Telize is released under the BSD 3-Clause license.                          #
 # See LICENSE file for details.                                               #
@@ -21,22 +21,19 @@ server {
 	keepalive_timeout 0;
 	gzip off;
 
-	location ~ /ip$
-	{
+	location ~ /ip$ {
 		charset off;
 		default_type text/plain;
 
 		echo $remote_addr;
 	}
 
-	location ~ /jsonip$
-	{
+	location ~ /jsonip$ {
 		echo_exec /jsonify ip=$remote_addr&callback=$arg_callback;
 	}
 
 	location ~ /geoip/?(?<ip>.*) {
-		if ($ip = "")
-		{
+		if ($ip = "") {
 			set $ip $remote_addr;
 		}
 
@@ -69,53 +66,53 @@ server {
 		}
 
 		content_by_lua '
-      local cjson = require("cjson")
-      local iconv = require("iconv")
-      local cd = iconv.new("utf-8","iso-8859-15")
+		local cjson = require("cjson")
+		local iconv = require("iconv")
+		local cd = iconv.new("utf-8","iso-8859-15")
 
-			local callback = ngx.var.arg_callback
+		local callback = ngx.var.arg_callback
 
-			local args = {
-				ip = ngx.var.arg_ip,
-				country_code = ngx.var.arg_country_code,
-				country_code3 = ngx.var.arg_country_code3,
-				country = ngx.var.arg_country,
-				region = ngx.var.arg_region,
-				region_code = ngx.var.arg_region_code,
-				city = cd:iconv(ngx.var.arg_city),
-				postal_code = ngx.var.arg_postal_code,
-				continent_code = ngx.var.arg_continent_code,
-				latitude = ngx.var.arg_latitude,
-				longitude = ngx.var.arg_longitude,
-				dma_code = ngx.var.arg_dma_code,
-				area_code = ngx.var.arg_area_code,
-				timezone = ngx.var.arg_timezone,
-				offset = ngx.var.arg_offset,
-				asn = ngx.var.asn,
-				isp = ngx.var.isp
-			}
+		local args = {
+			ip = ngx.var.arg_ip,
+			country_code = ngx.var.arg_country_code,
+			country_code3 = ngx.var.arg_country_code3,
+			country = ngx.var.arg_country,
+			region = ngx.var.arg_region,
+			region_code = ngx.var.arg_region_code,
+			city = cd:iconv(ngx.var.arg_city),
+			postal_code = ngx.var.arg_postal_code,
+			continent_code = ngx.var.arg_continent_code,
+			latitude = ngx.var.arg_latitude,
+			longitude = ngx.var.arg_longitude,
+			dma_code = ngx.var.arg_dma_code,
+			area_code = ngx.var.arg_area_code,
+			timezone = ngx.var.arg_timezone,
+			offset = ngx.var.arg_offset,
+			asn = ngx.var.asn,
+			isp = ngx.var.isp
+		}
 
-			-- Validate args
-			for item, value in pairs(args) do
-				if args[item] == "" then
-					args[item] = nil
-				elseif item == "latitude" or item == "longitude" then
-					args[item] = tonumber(value)
-				end
+		-- Validate args
+		for item, value in pairs(args) do
+			if args[item] == "" then
+				args[item] = nil
+			elseif item == "latitude" or item == "longitude" then
+				args[item] = tonumber(value)
 			end
+		end
 
-			if args["ip"] == "127.0.0.1" then
-				ngx.status = ngx.HTTP_BAD_REQUEST
-				ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
-				ngx.exit(ngx.HTTP_OK)
-			end
+		if args["ip"] == "127.0.0.1" then
+			ngx.status = ngx.HTTP_BAD_REQUEST
+			ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
+			ngx.exit(ngx.HTTP_OK)
+		end
 
-			local json = cjson.encode(args)
+		local json = cjson.encode(args)
 
-			if callback ~= "" then
-				ngx.say(callback, "(", json, ");")
-			else
-				ngx.say(json)
-			end';
+		if callback ~= "" then
+			ngx.say(callback, "(", json, ");")
+		else
+			ngx.say(json)
+		end';
 	}
 }
