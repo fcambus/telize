@@ -24,6 +24,8 @@ server {
 	gzip off;
 
 	location ~ /ip$ {
+		add_header Cache-Control no-cache;
+
 		charset off;
 		default_type text/plain;
 
@@ -58,6 +60,8 @@ server {
 
 	location /jsonify {
 		access_log off;
+
+		add_header Cache-Control no-cache;
 
 		charset utf-8;
 		default_type application/json;
