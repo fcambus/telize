@@ -79,7 +79,7 @@ server {
 			country = ngx.var.arg_country,
 			region = ngx.var.arg_region,
 			region_code = ngx.var.arg_region_code,
-			city = cd:iconv(ngx.var.arg_city),
+			city = ngx.var.arg_city,
 			postal_code = ngx.var.arg_postal_code,
 			continent_code = ngx.var.arg_continent_code,
 			latitude = ngx.var.arg_latitude,
@@ -99,6 +99,11 @@ server {
 			elseif item == "latitude" or item == "longitude" then
 				args[item] = tonumber(value)
 			end
+		end
+
+		-- Convert city name to UTF-8 if it exists
+		if args.city ~= nil then
+			args.city = cd:iconv(args.city)
 		end
 
 		if args.ip == "127.0.0.1" then
