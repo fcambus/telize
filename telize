@@ -101,7 +101,7 @@ server {
 			end
 		end
 
-		if args["ip"] == "127.0.0.1" then
+		if args.ip == "127.0.0.1" then
 			ngx.status = ngx.HTTP_BAD_REQUEST
 			ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
 			ngx.exit(ngx.HTTP_OK)
