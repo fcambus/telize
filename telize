@@ -61,6 +61,7 @@ server {
 	location /jsonify {
 		access_log off;
 
+		add_header Access-Control-Allow-Origin *;
 		add_header Cache-Control no-cache;
 
 		charset utf-8;
