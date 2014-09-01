@@ -132,6 +132,13 @@ By the following directive :
 
 	proxy_set_header X-Forwarded-For $ip;
 
+## CORS Support (Cross-origin resource sharing) 
+
+Telize has CORS enabled by default since version 1.02. The following variables defines CORS behavior, within the `telize` configuration file.
+
+	set $cors "true";
+	set $cors_origin "*";
+
 ## Usage 
 
 For complete API documentation and JavaScript API usage examples, please check
