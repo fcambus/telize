@@ -1,3 +1,15 @@
+Telize 1.02 (2014-09-01)
+
+- Refactored Lua code (Thanks to Jon Nalley)
+- Adding support for Timezones offsets (Thanks to Yann Verry)
+- Default output charset is now UTF-8 (Thanks to Yann Verry)
+- Adding an automatic install script for Debian
+- Enable setting charsets for application/json MIME type
+- Adding Cache-Control headers (no-cache by default)
+- Enabling CORS by default
+
+
+
 Telize 1.01 (2013-10-11)
 
 - Adding support for Timezones

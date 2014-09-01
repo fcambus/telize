@@ -183,6 +183,6 @@ Telize is developed by Frederic Cambus
 
 Project Homepage : http://www.telize.com
 
-Latest tarball release : http://www.statdns.com/telize/telize-1.01.tar.gz
+Latest tarball release : http://www.statdns.com/telize/telize-1.02.tar.gz
 
 GitHub : https://github.com/fcambus/telize
