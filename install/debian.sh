@@ -2,7 +2,7 @@
 echo "deb http://http.debian.net/debian wheezy-backports main" >> /etc/apt/sources.list
 apt-get update
 apt-get install -t wheezy-backports nginx-extras 
-apt-get install luarocks
+apt-get install build-essential luarocks unzip
 luarocks install lua-cjson
 luarocks install lua-iconv
 
