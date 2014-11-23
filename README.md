@@ -114,7 +114,11 @@ There is an automatic install script for Debian :
 
 	sh install/debian.sh
 
-Lastly, if your Telize instance produces lots of logs, this might be of interest : [Log rotation directly within Nginx configuration file](http://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/).
+## Access and Error logs
+
+The default Telize configuration does not have logging enabled, it must be configured manually.
+
+If your Telize instance produces lots of logs, this might be of interest : [Log rotation directly within Nginx configuration file](http://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/).
 
 ## Telize and Load Balancers
 
