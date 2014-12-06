@@ -20,6 +20,8 @@ Telize is a REST API built on Nginx and Lua allowing to get a visitor IP
 address and to query location information from any IP address. It outputs
 JSON-encoded IP geolocation data, and supports both JSON and JSONP.
 
+Geolocation operations are performed using Nginx GeoIP module which caches the database in RAM. Therefore, Telize has very minimal overhead and should be blazing fast.
+
 ## Requirements
 
 ### Nginx modules
@@ -30,6 +32,7 @@ Telize requires Nginx compiled with the following modules :
 - HttpRealipModule (Optional HTTP module : --with-http_realip_module)
 - HttpEchoModule (Third party module (ngx_echo) : http://wiki.nginx.org/HttpEchoModule)
 - HttpLuaModule (Third party module (ngx_lua) : http://wiki.nginx.org/HttpLuaModule)
+- HttpHeadersMoreModule (Third party module (ngx_headers_more) : http://wiki.nginx.org/HttpHeadersMoreModule)
 
 If you are using Debian stable, the `nginx-extras` package have these
 modules compiled-in.
