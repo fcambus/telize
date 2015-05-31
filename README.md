@@ -113,6 +113,8 @@ Depending on existing configuration, the `map_hash_max_size` and `map_hash_bucke
 	map_hash_max_size 8192;
 	map_hash_bucket_size 64;
 
+On busy instances, the maximum number of open files limit must be increased using the `worker_rlimit_nofile` directive in order to avoid running out of available file descriptors.
+
 There is an automatic install script for Debian :
 
 	sh install/debian.sh
@@ -124,7 +126,6 @@ The default Telize configuration does not have logging enabled, it must be confi
 If your Telize instance produces lots of logs, this might be of interest : [Log rotation directly within Nginx configuration file](http://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/).
 
 ## Telize and Load Balancers
-
 
 When using Telize behind a load balancer, uncomment the following directives in the server block and set the load balancer IP range accordingly :
 
