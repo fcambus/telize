@@ -26,7 +26,7 @@ Geolocation operations are performed using Nginx GeoIP module which caches the d
 
 ### Nginx modules
 
-Telize requires Nginx compiled with the following modules :
+Telize requires Nginx 1.7.4+ compiled with the following modules :
 
 - GeoIP (Optional HTTP modules : --with-http_geoip_module)
 - HttpRealipModule (Optional HTTP module : --with-http_realip_module)
