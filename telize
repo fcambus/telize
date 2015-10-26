@@ -116,9 +116,13 @@ server {
 		for item, value in pairs(args) do
 			if args[item] == "" then
 				args[item] = nil
-			elseif item == "latitude" or item == "longitude" then
-				args[item] = tonumber(value)
 			end
+		end
+
+		-- Convert latitude and longitude to numeric values
+		if args.latitude ~= nil and args.longitude ~= nil then
+			args.latitude = tonumber(args.latitude)
+			args.longitude = tonumber(args.longitude)
 		end
 
 		-- Convert city name to UTF-8 if it exists
