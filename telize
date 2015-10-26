@@ -98,7 +98,7 @@ server {
 		asn = string.sub(ngx.var.geoip_org, 0, index-1)
 		isp = string.sub(ngx.var.geoip_org, index)
 
-		local args = {
+		local payload = {
 			ip = ngx.var.arg_ip,
 			country_code = ngx.var.geoip_city_country_code,
 			country_code3 = ngx.var.geoip_city_country_code3,
@@ -120,35 +120,35 @@ server {
 
 		local callback = ngx.var.arg_callback
 
-		-- Validate args
-		for item, value in pairs(args) do
-			if args[item] == "" then
-				args[item] = nil
+		-- Validate payload
+		for item, value in pairs(payload) do
+			if payload[item] == "" then
+				payload[item] = nil
 			end
 		end
 
 		-- Convert latitude and longitude to numeric values
-		if args.latitude ~= nil and args.longitude ~= nil then
-			args.latitude = tonumber(args.latitude)
-			args.longitude = tonumber(args.longitude)
+		if payload.latitude ~= nil and payload.longitude ~= nil then
+			payload.latitude = tonumber(payload.latitude)
+			payload.longitude = tonumber(payload.longitude)
 		end
 
 		-- Convert city name to UTF-8 if it exists
-		if args.city ~= nil then
-			args.city = cd:iconv(args.city)
+		if payload.city ~= nil then
+			payload.city = cd:iconv(payload.city)
 		end
 
 		-- Convert region name to UTF-8 if it exists
-		if args.region ~= nil then
-			args.region = cd:iconv(args.region)
+		if payload.region ~= nil then
+			payload.region = cd:iconv(payload.region)
 		end
 
 		-- Convert isp name to UTF-8 if it exists
-		if args.isp ~= nil then
-			args.isp = cd:iconv(args.isp)
+		if payload.isp ~= nil then
+			payload.isp = cd:iconv(payload.isp)
 		end
 
-		local json = cjson.encode(args)
+		local json = cjson.encode(payload)
 
 		if callback ~= "" then
 			ngx.say(callback, "(", json, ");")
