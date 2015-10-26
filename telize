@@ -96,7 +96,7 @@ server {
 
 		index = string.find(ngx.var.geoip_org, "%s")
 		asn = string.sub(ngx.var.geoip_org, 0, index-1)
-		isp = string.sub(ngx.var.geoip_org, index)
+		isp = string.sub(ngx.var.geoip_org, index+1)
 
 		local payload = {
 			ip = ngx.var.arg_ip,
