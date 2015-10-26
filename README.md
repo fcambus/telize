@@ -115,10 +115,6 @@ Depending on existing configuration, the `map_hash_max_size` and `map_hash_bucke
 
 On busy instances, the maximum number of open files limit must be increased using the `worker_rlimit_nofile` directive in order to avoid running out of available file descriptors.
 
-There is an automatic install script for Debian :
-
-	sh install/debian.sh
-
 ## Access and Error logs
 
 The default Telize configuration does not have logging enabled, it must be configured manually.
