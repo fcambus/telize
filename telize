@@ -37,7 +37,23 @@ server {
 	}
 
 	location ~ /jsonip$ {
-		echo_exec /jsonify ip=$remote_addr&callback=$arg_callback;
+		charset utf-8;
+		default_type application/json;
+
+		content_by_lua '
+		local cjson = require("cjson")
+
+		local json = cjson.encode({
+			ip = ngx.var.remote_addr
+		})
+
+		local callback = ngx.var.arg_callback
+
+		if callback then
+			ngx.say(callback, "(", json, ");")
+		else
+			ngx.say(json)
+		end';
 	}
 
 	location ~ /geoip/?(?<ip>.*) {
