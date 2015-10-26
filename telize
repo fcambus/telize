@@ -94,9 +94,12 @@ server {
 			ngx.exit(ngx.HTTP_OK)
 		end
 
-		index = string.find(ngx.var.geoip_org, "%s")
-		asn = string.sub(ngx.var.geoip_org, 0, index-1)
-		isp = string.sub(ngx.var.geoip_org, index+1)
+		-- Splitting GeoIP organization string into ASN and ISP
+		if ngx.var.geoip_org then		
+			index = string.find(ngx.var.geoip_org, "%s")
+			asn = string.sub(ngx.var.geoip_org, 0, index-1)
+			isp = string.sub(ngx.var.geoip_org, index+1)
+		end
 
 		local payload = {
 			ip = ngx.var.arg_ip,
