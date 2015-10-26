@@ -49,6 +49,8 @@ Installing via LuaRocks :
 	luarocks install lua-cjson
 	luarocks install lua-iconv
 
+Alternatively, those modules can be installed directly using binary packages.
+
 ### GeoIP databases
 
 Telize requires the free GeoLite databases : http://dev.maxmind.com/geoip/legacy/geolite/
