@@ -66,7 +66,7 @@ server {
 
 		proxy_set_header X-Real-IP $ip;
 		proxy_set_header Host $host;
-		proxy_pass $scheme://127.0.0.1/jsonify?ip=$ip&callback=$arg_callback;
+		proxy_pass $scheme://127.0.0.1/jsonify?callback=$arg_callback;
 	}
 
 	location /jsonify {
@@ -88,7 +88,8 @@ server {
 		local iconv = require("iconv")
 		local cd = iconv.new("utf-8","iso-8859-15")
 
-		if ngx.var.arg_ip == "127.0.0.1" then
+		-- Check for invalid IP addresses
+		if ngx.var.remote_addr == "127.0.0.1" then
 			ngx.status = ngx.HTTP_BAD_REQUEST
 			ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
 			ngx.exit(ngx.HTTP_OK)
@@ -102,7 +103,7 @@ server {
 		end
 
 		local payload = {
-			ip = ngx.var.arg_ip,
+			ip = ngx.var.remote_addr,
 			country_code = ngx.var.geoip_city_country_code,
 			country_code3 = ngx.var.geoip_city_country_code3,
 			country = ngx.var.geoip_city_country_name,
@@ -146,7 +147,7 @@ server {
 			payload.region = cd:iconv(payload.region)
 		end
 
-		-- Convert isp name to UTF-8 if it exists
+		-- Convert ISP name to UTF-8 if it exists
 		if payload.isp ~= nil then
 			payload.isp = cd:iconv(payload.isp)
 		end
