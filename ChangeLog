@@ -1,3 +1,17 @@
+Telize 1.03 (2015-10-??)
+
+- Fix region and ISP name encoding (Thanks to Ludovic Robinot)
+- Check for invalid IP addresses before attempting to validate arguments
+- Convert latitude and longitude to numeric values only after all arguments
+  have been validated
+- The 'jsonip' endpoint do not use the internal 'jsonify' endpoint anymore
+- Various documentation updates
+- The 'localize' internal endpoint is not needed anymore, and Telize now
+  requires Nginx 1.7.4+
+- Splitting GeoIP organization string into ASN and ISP using Lua
+
+
+
 Telize 1.02 (2014-09-01)
 
 - Refactored Lua code (Thanks to Jon Nalley)
