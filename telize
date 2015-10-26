@@ -66,28 +66,16 @@ server {
 
 		proxy_set_header X-Real-IP $ip;
 		proxy_set_header Host $host;
-		proxy_pass $scheme://127.0.0.1/localize?callback=$arg_callback;
-	}
-
-	location /localize {
-		# This step is necessary as $geoip_latitude and $geoip_longitude fields might not always be
-		# initialized. This issue is fixed in Nginx 1.7.4 and this section will become redundant.
-
-		set_real_ip_from 127.0.0.1;
-
-		echo_exec /jsonify ip=$remote_addr&country_code=$geoip_city_country_code&country_code3=$geoip_city_country_code3&country=$geoip_city_country_name&region_code=$geoip_region&region=$geoip_region_name&city=$geoip_city&postal_code=$geoip_postal_code&continent_code=$geoip_city_continent_code&latitude=$geoip_latitude&longitude=$geoip_longitude&dma_code=$geoip_dma_code&area_code=$geoip_area_code&org=$geoip_org&timezone=$geoip_timezone&offset=$geoip_timezone_offset&callback=$arg_callback;
+		proxy_pass $scheme://127.0.0.1/jsonify?ip=$ip&callback=$arg_callback;
 	}
 
 	location /jsonify {
+		set_real_ip_from 127.0.0.1;
+
 		access_log off;
 
 		charset utf-8;
 		default_type application/json;
-
-		if ($arg_org ~* "^(AS[0-9]+) (.+)") {
-			set $asn $1;
-			set $isp $2;
-		}
 
 		if ($cors = "true") {
 			add_header Access-Control-Allow-Origin $cors_origin;
@@ -106,24 +94,28 @@ server {
 			ngx.exit(ngx.HTTP_OK)
 		end
 
+		index = string.find(ngx.var.geoip_org, "%s")
+		asn = string.sub(ngx.var.geoip_org, 0, index-1)
+		isp = string.sub(ngx.var.geoip_org, index)
+
 		local args = {
 			ip = ngx.var.arg_ip,
-			country_code = ngx.var.arg_country_code,
-			country_code3 = ngx.var.arg_country_code3,
-			country = ngx.var.arg_country,
-			region = ngx.var.arg_region,
-			region_code = ngx.var.arg_region_code,
-			city = ngx.var.arg_city,
-			postal_code = ngx.var.arg_postal_code,
-			continent_code = ngx.var.arg_continent_code,
-			latitude = ngx.var.arg_latitude,
-			longitude = ngx.var.arg_longitude,
-			dma_code = ngx.var.arg_dma_code,
-			area_code = ngx.var.arg_area_code,
-			timezone = ngx.var.arg_timezone,
-			offset = ngx.var.arg_offset,
-			asn = ngx.var.asn,
-			isp = ngx.var.isp
+			country_code = ngx.var.geoip_city_country_code,
+			country_code3 = ngx.var.geoip_city_country_code3,
+			country = ngx.var.geoip_city_country_name,
+			region = ngx.var.geoip_region,
+			region_code = ngx.var.geoip_region_name,
+			city = ngx.var.geoip_city,
+			postal_code = ngx.var.geoip_postal_code,
+			continent_code = ngx.var.geoip_city_continent_code,
+			latitude = ngx.var.geoip_latitude,
+			longitude = ngx.var.geoip_longitude,
+			dma_code = ngx.var.geoip_dma_code,
+			area_code = ngx.var.geoip_area_code,
+			timezone = ngx.var.geoip_timezone,
+			offset = ngx.var.geoip_timezone_offset,
+			asn = asn,
+			isp = isp
 		}
 
 		local callback = ngx.var.arg_callback
