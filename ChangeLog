@@ -1,6 +1,7 @@
-Telize 1.03 (2015-10-??)
+Telize 1.03 (2015-10-27)
 
 - Fix region and ISP name encoding (Thanks to Ludovic Robinot)
+- Removed legacy Debian automatic install script
 - Check for invalid IP addresses before attempting to validate arguments
 - Convert latitude and longitude to numeric values only after all arguments
   have been validated
