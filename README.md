@@ -11,7 +11,7 @@
       <0(--- \__/ -h7- \______/   \       .    \__/ ---- \______/ --(0>
                            \      .\     /.      .
                             \      .\   //      /
-                             \______\\ //______/ 
+                             \______\\ //______/
                                       Y
 
 ## Description
@@ -45,10 +45,10 @@ For maximum performance, please make sure the HttpLuaModule is compiled against 
 
 Telize requires the following Lua module :
 
-- Lua CJSON 
+- Lua CJSON
 - Lua iconv
 
-Installing via LuaRocks : 
+Installing via LuaRocks :
 
 	luarocks install lua-cjson
 	luarocks install lua-iconv
@@ -83,7 +83,7 @@ Copy `timezone.conf` and `timezone-offset.conf` in the Nginx configuration files
 
 Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add directives specifying the path to the GeoIP database files, within the http block.
 
-#### For IPv4 support only :
+#### For IPv4 support only
 
 	http {
 
@@ -97,7 +97,7 @@ Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add 
 		geoip_org      /usr/share/GeoIP/GeoIPASNum.dat;
 	}
 
-#### For IPv4 and IPv6 support (requires at least Nginx 1.3.12) :
+#### For IPv4 and IPv6 support (requires at least Nginx 1.3.12)
 
 	http {
 
@@ -142,28 +142,28 @@ By the following directive :
 
 	proxy_set_header X-Forwarded-For $ip;
 
-## CORS Support (Cross-origin resource sharing) 
+## CORS Support (Cross-origin resource sharing)
 
 Telize has CORS enabled by default since version 1.02. The following variables defines CORS behavior, within the `telize` configuration file.
 
 	set $cors "true";
 	set $cors_origin "*";
 
-## Usage 
+## Usage
 
 For complete API documentation and JavaScript API usage examples, please check
 the project site : http://www.telize.com
 
-### Get IP address in Plain text format :
+### Get IP address in Plain text format
 
 - Example : http://www.telize.com/ip
 
-### Get IP address in JSON format :
+### Get IP address in JSON format
 
 - Example (JSON) : http://www.telize.com/jsonip
 - Example (JSONP) : http://www.telize.com/jsonip?callback=getip
 
-### Get IP address location in JSON format :
+### Get IP address location in JSON format
 
 Calling the API endpoint without any parameter will return the visitor
 IP address :
