@@ -37,6 +37,10 @@ Telize requires Nginx 1.7.4+ compiled with the following modules :
 If you are using Debian stable, the `nginx-extras` package have these
 modules compiled-in.
 
+For maximum performance, please make sure the HttpLuaModule is compiled against LuaJIT :
+
+	ldd $(which nginx) | grep lua
+
 ### Lua modules
 
 Telize requires the following Lua module :
