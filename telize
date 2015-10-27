@@ -4,7 +4,7 @@
 # http://www.telize.com                                                       #
 #                                                                             #
 # Created: 2013/08/15                                                         #
-# Last Updated: 2015/10/26                                                    #
+# Last Updated: 2015/10/27                                                    #
 #                                                                             #
 # Telize is released under the BSD 3-Clause license.                          #
 # See LICENSE file for details.                                               #
@@ -107,8 +107,8 @@ server {
 			country_code = ngx.var.geoip_city_country_code,
 			country_code3 = ngx.var.geoip_city_country_code3,
 			country = ngx.var.geoip_city_country_name,
-			region = ngx.var.geoip_region,
-			region_code = ngx.var.geoip_region_name,
+			region = ngx.var.geoip_region_name,
+			region_code = ngx.var.geoip_region,
 			city = ngx.var.geoip_city,
 			postal_code = ngx.var.geoip_postal_code,
 			continent_code = ngx.var.geoip_city_continent_code,
