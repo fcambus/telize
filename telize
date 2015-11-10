@@ -4,7 +4,7 @@
 # http://www.telize.com                                                       #
 #                                                                             #
 # Created: 2013/08/15                                                         #
-# Last Updated: 2015/10/27                                                    #
+# Last Updated: 2015/11/10                                                    #
 #                                                                             #
 # Telize is released under the BSD 3-Clause license.                          #
 # See LICENSE file for details.                                               #
@@ -95,13 +95,6 @@ server {
 			ngx.exit(ngx.HTTP_OK)
 		end
 
-		-- Splitting GeoIP organization string into ASN and ISP
-		if ngx.var.geoip_org then
-			index = string.find(ngx.var.geoip_org, "%s")
-			asn = string.sub(ngx.var.geoip_org, 0, index-1)
-			isp = string.sub(ngx.var.geoip_org, index+1)
-		end
-
 		local payload = {
 			ip = ngx.var.remote_addr,
 			country_code = ngx.var.geoip_city_country_code,
@@ -116,10 +109,9 @@ server {
 			longitude = ngx.var.geoip_longitude,
 			dma_code = ngx.var.geoip_dma_code,
 			area_code = ngx.var.geoip_area_code,
+			organization = ngx.var.geoip_org,
 			timezone = ngx.var.geoip_timezone,
 			offset = ngx.var.geoip_timezone_offset,
-			asn = asn,
-			isp = isp
 		}
 
 		local callback = ngx.var.arg_callback
@@ -145,11 +137,6 @@ server {
 		-- Convert region name to UTF-8 if it exists
 		if payload.region ~= nil then
 			payload.region = cd:iconv(payload.region)
-		end
-
-		-- Convert ISP name to UTF-8 if it exists
-		if payload.isp ~= nil then
-			payload.isp = cd:iconv(payload.isp)
 		end
 
 		local json = cjson.encode(payload)
