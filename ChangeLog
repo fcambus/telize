@@ -1,3 +1,10 @@
+Telize 1.04 (2015-11-10)
+
+- Do not attempt to split GeoIP org field into ASN and ISP, return the raw
+  organization string instead
+
+
+
 Telize 1.03 (2015-10-27)
 
 - Fix region and ISP name encoding (Thanks to Ludovic Robinot)
