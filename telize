@@ -139,6 +139,11 @@ server {
 			payload.region = cd:iconv(payload.region)
 		end
 
+		-- Convert organization name to UTF-8 if it exists
+		if payload.organization ~= nil then
+			payload.organization = cd:iconv(payload.organization)
+		end
+
 		local json = cjson.encode(payload)
 
 		if callback ~= "" then
