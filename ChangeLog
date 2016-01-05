@@ -1,3 +1,9 @@
+Telize 1.05 (2016-01-05)
+
+- Regression fix : organization name was not correctly converted to UTF-8
+
+
+
 Telize 1.04 (2015-11-10)
 
 - Do not attempt to split GeoIP org field into ASN and ISP, return the raw
