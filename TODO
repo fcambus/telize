@@ -1,3 +1,4 @@
 - Document time zone offsets : http://en.wikipedia.org/wiki/List_of_UTC_time_offsets
 - Force UTF-8 encoding of GeoIP variables directly in Nginx to drop dependency on
   Lua iconv module
+- Use 'content_by_lua_block' directive instead of 'content_by_lua'
