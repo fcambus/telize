@@ -1,3 +1,9 @@
+Telize 1.06 (2016-02-04)
+
+- Prefixing all country codes with carets to prevent wrong matching
+
+
+
 Telize 1.05 (2016-01-05)
 
 - Regression fix : organization name was not correctly converted to UTF-8
