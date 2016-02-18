@@ -2,5 +2,4 @@
 - Force UTF-8 encoding of GeoIP variables directly in Nginx to drop dependency on
   Lua iconv module
 - Use 'content_by_lua_block' directive instead of 'content_by_lua'
-- Rewrite the timezone offset generator in Lua
 - Use Lua to set additional headers?
