@@ -43,7 +43,7 @@ For maximum performance, please make sure the HttpLuaModule is compiled against 
 
 ### Lua modules
 
-Telize requires the following Lua module :
+Telize requires the following Lua modules :
 
 - Lua CJSON
 - Lua iconv
