@@ -179,7 +179,7 @@ this IP address :
 
 ## License
 
-Telize is released under the BSD 3-Clause license. See `LICENSE` file
+Telize is released under the BSD 2-Clause license. See `LICENSE` file
 for details.
 
 ## Author
