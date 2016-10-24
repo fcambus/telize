@@ -5,7 +5,7 @@
 # http://www.telize.com                                                       #
 #                                                                             #
 # Created: 2013-08-15                                                         #
-# Last Updated: 2016-07-18                                                    #
+# Last Updated: 2016-10-24                                                    #
 #                                                                             #
 # Telize is released under the BSD 2-Clause license.                          #
 # See LICENSE file for details.                                               #
@@ -82,12 +82,12 @@ server {
 			add_header Access-Control-Allow-Origin $cors_origin;
 		}
 
-		more_set_headers "Cache-Control: no-cache";
-
 		content_by_lua '
 		local cjson = require("cjson")
 		local iconv = require("iconv")
 		local cd = iconv.new("utf-8","iso-8859-15")
+
+		ngx.header["Cache-Control"] = "no-cache";
 
 		-- Check for invalid IP addresses
 		if ngx.var.remote_addr == "127.0.0.1" then
