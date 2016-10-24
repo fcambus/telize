@@ -28,9 +28,9 @@ Geolocation operations are performed using Nginx GeoIP module which caches the d
 
 Telize requires Nginx 1.7.4+ compiled with the following modules :
 
-- GeoIP (Optional HTTP modules : --with-http_geoip_module)
+- GeoIP (Optional HTTP module : --with-http_geoip_module)
 - HttpRealipModule (Optional HTTP module : --with-http_realip_module)
-- HttpLuaModule (Third party module (ngx_lua) : http://wiki.nginx.org/HttpLuaModule)
+- HttpLuaModule 0.9.17+ (Third party module (ngx_lua) : http://wiki.nginx.org/HttpLuaModule)
 
 If you are using Debian stable, the `nginx-extras` package have these
 modules compiled-in.
