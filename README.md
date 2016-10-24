@@ -30,7 +30,6 @@ Telize requires Nginx 1.7.4+ compiled with the following modules :
 
 - GeoIP (Optional HTTP modules : --with-http_geoip_module)
 - HttpRealipModule (Optional HTTP module : --with-http_realip_module)
-- HttpEchoModule (Third party module (ngx_echo) : http://wiki.nginx.org/HttpEchoModule)
 - HttpLuaModule (Third party module (ngx_lua) : http://wiki.nginx.org/HttpLuaModule)
 
 If you are using Debian stable, the `nginx-extras` package have these

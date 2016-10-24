@@ -34,7 +34,7 @@ server {
 		charset off;
 		default_type text/plain;
 
-		echo $remote_addr;
+		content_by_lua 'ngx.say(ngx.var.remote_addr)';
 	}
 
 	location ~ /jsonip$ {
