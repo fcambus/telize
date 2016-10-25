@@ -151,26 +151,26 @@ the project site : http://www.telize.com
 
 ### Get IP address in Plain text format
 
-- Example : http://www.telize.com/ip
+- Example : http://127.0.0.1/ip
 
 ### Get IP address in JSON format
 
-- Example (JSON) : http://www.telize.com/jsonip
-- Example (JSONP) : http://www.telize.com/jsonip?callback=getip
+- Example (JSON) : http://127.0.0.1/jsonip
+- Example (JSONP) : http://127.0.0.1/jsonip?callback=getip
 
 ### Get IP address location in JSON format
 
 Calling the API endpoint without any parameter will return the visitor
 IP address :
 
-- Example (JSON) : http://www.telize.com/geoip
-- Example (JSONP) : http://www.telize.com/geoip?callback=getgeoip
+- Example (JSON) : http://127.0.0.1/geoip
+- Example (JSONP) : http://127.0.0.1/geoip?callback=getgeoip
 
 Appending an IP address as parameter will return location information for
 this IP address :
 
-- Example (JSON) : http://www.telize.com/geoip/46.19.37.108
-- Example (JSONP) : http://www.telize.com/geoip/46.19.37.108?callback=getgeoip
+- Example (JSON) : http://127.0.0.1/geoip/46.19.37.108
+- Example (JSONP) : http://127.0.0.1/geoip/46.19.37.108?callback=getgeoip
 
 ## License
 
