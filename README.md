@@ -56,8 +56,8 @@ Telize requires the free GeoLite databases : http://dev.maxmind.com/geoip/legacy
 
 #### For IPv4 support only :
 
-	mkdir -p /usr/share/GeoIP
-	cd /usr/share/GeoIP
+	mkdir -p /var/db/GeoIP
+	cd /var/db/GeoIP
 	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
 	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 	wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz
@@ -65,8 +65,8 @@ Telize requires the free GeoLite databases : http://dev.maxmind.com/geoip/legacy
 
 #### For IPv4 and IPv6 support :
 
-	mkdir -p /usr/share/GeoIP
-	cd /usr/share/GeoIP
+	mkdir -p /var/db/GeoIP
+	cd /var/db/GeoIP
 	wget http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz
 	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
 	wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNumv6.dat.gz
@@ -87,9 +87,9 @@ Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add 
 		include        /etc/nginx/timezone.conf;
 		include        /etc/nginx/timezone-offset.conf;
 
-		geoip_country  /usr/share/GeoIP/GeoIP.dat;
-		geoip_city     /usr/share/GeoIP/GeoLiteCity.dat;
-		geoip_org      /usr/share/GeoIP/GeoIPASNum.dat;
+		geoip_country  /var/db/GeoIP/GeoIP.dat;
+		geoip_city     /var/db/GeoIP/GeoLiteCity.dat;
+		geoip_org      /var/db/GeoIP/GeoIPASNum.dat;
 	}
 
 #### For IPv4 and IPv6 support (requires at least Nginx 1.3.12)
@@ -101,9 +101,9 @@ Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to add 
 		include        /etc/nginx/timezone.conf;
 		include        /etc/nginx/timezone-offset.conf;
 
-		geoip_country  /usr/share/GeoIP/GeoIPv6.dat;
-		geoip_city     /usr/share/GeoIP/GeoLiteCityv6.dat;
-		geoip_org      /usr/share/GeoIP/GeoIPASNumv6.dat;
+		geoip_country  /var/db/GeoIP/GeoIPv6.dat;
+		geoip_city     /var/db/GeoIP/GeoLiteCityv6.dat;
+		geoip_org      /var/db/GeoIP/GeoIPASNumv6.dat;
 	}
 
 Then deploy the API configuration file `telize` to the appropriate location on
