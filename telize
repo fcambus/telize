@@ -65,7 +65,8 @@ server {
 			set $ip $remote_addr;
 		}
 
-		# Uncomment when using Telize behind a load balancer, and comment the directive setting X-Real-IP
+		# Uncomment when using Telize behind a load balancer, and
+		# comment the directive setting X-Real-IP
 		# proxy_set_header X-Forwarded-For $ip;
 
 		proxy_set_header X-Real-IP $ip;
@@ -95,7 +96,10 @@ server {
 			-- Check for invalid IP addresses
 			if ngx.var.remote_addr == "127.0.0.1" then
 				ngx.status = ngx.HTTP_BAD_REQUEST
-				ngx.say(cjson.encode({code = 401, message = "Input string is not a valid IP address"}))
+				ngx.say(cjson.encode({
+					code = 401,
+					message = "Input string is not a valid IP address"
+				}))
 				ngx.exit(ngx.HTTP_OK)
 			end
 
