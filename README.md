@@ -28,11 +28,11 @@ be blazing fast.
 
 ### Nginx modules
 
-Telize requires Nginx 1.7.4+ compiled with the following modules :
+Telize requires Nginx 1.7.4+ compiled with the following modules:
 
 - GeoIP (Optional HTTP module: --with-http_geoip_module)
 - HttpRealipModule (Optional HTTP module: --with-http_realip_module)
-- HttpLuaModule 0.9.17+ (Third party module [ngx_lua][1])
+- HttpLuaModule 0.9.17+ (Third party module: [ngx_lua][1])
 
 For maximum performance, please make sure the HttpLuaModule is compiled
 against LuaJIT:
@@ -162,7 +162,7 @@ defines CORS behavior, within the `telize` configuration file.
 ## Usage
 
 For complete API documentation and JavaScript API usage examples, please check
-the project site: http://www.telize.com
+the project site.
 
 ### Get IP address in Plain text format
 
@@ -201,12 +201,12 @@ Telize is developed by Frederic Cambus.
 
 ## Resources
 
-Project Homepage: http://www.telize.com
+Project homepage: http://www.telize.com
 
 Latest tarball release: http://www.statdns.com/telize/telize-1.06.tar.gz
 
 GitHub: https://github.com/fcambus/telize
 
-[1]: http://wiki.nginx.org/HttpLuaModule
+[1]: https://github.com/openresty/lua-nginx-module
 [2]: http://dev.maxmind.com/geoip/legacy/geolite/
 [3]: http://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/
