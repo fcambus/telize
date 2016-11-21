@@ -1,3 +1,16 @@
+Telize 1.07 (2016-11-22)
+
+- The timezone offset generator has been rewritten in Lua
+- Relicensed under the BSD 2-Clause license
+- Use Lua to set additional headers and drop dependency on the
+  'ngx_headers_more' module
+- Use Lua to echo IP address in the 'ip' endpoint and drop dependency on
+  the 'ngx_echo' module
+- Use 'content_by_lua_block' directive instead of 'content_by_lua'
+- Various documentation updates
+
+
+
 Telize 1.06 (2016-02-04)
 
 - Prefixing all country codes with carets to prevent wrong matching
@@ -6,7 +19,7 @@ Telize 1.06 (2016-02-04)
 
 Telize 1.05 (2016-01-05)
 
-- Regression fix : organization name was not correctly converted to UTF-8
+- Regression fix: organization name was not correctly converted to UTF-8
 
 
 
@@ -49,7 +62,7 @@ Telize 1.01 (2013-10-11)
 - Adding support for Timezones
 - Adding support for GeoIP ASN database
 - Enforcing strictly defined URL endpoints
-- Prevent logging of internal redirects 
+- Prevent logging of internal redirects
 
 
 
