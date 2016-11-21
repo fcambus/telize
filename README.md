@@ -30,8 +30,8 @@ be blazing fast.
 
 Telize requires Nginx 1.7.4+ compiled with the following modules :
 
-- GeoIP (Optional HTTP module : --with-http_geoip_module)
-- HttpRealipModule (Optional HTTP module : --with-http_realip_module)
+- GeoIP (Optional HTTP module: --with-http_geoip_module)
+- HttpRealipModule (Optional HTTP module: --with-http_realip_module)
 - HttpLuaModule 0.9.17+ (Third party module [ngx_lua][1])
 
 For maximum performance, please make sure the HttpLuaModule is compiled
@@ -46,7 +46,7 @@ Telize requires the following Lua modules:
 - Lua CJSON
 - Lua iconv
 
-Installing via LuaRocks :
+Installing via LuaRocks:
 
 	luarocks install lua-cjson
 	luarocks install lua-iconv
@@ -55,7 +55,7 @@ Alternatively, those modules can be installed directly using binary packages.
 
 ### GeoIP databases
 
-Telize requires the free [GeoLite databases] from MaxMind.
+Telize requires the free [GeoLite databases][2] from MaxMind.
 
 #### For IPv4 support only
 
