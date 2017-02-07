@@ -196,12 +196,12 @@ for details.
 
 Telize is developed by Frederic Cambus.
 
-- Site: http://www.cambus.net
-- Twitter: http://twitter.com/fcambus
+- Site: https://www.cambus.net
+- Twitter: https://twitter.com/fcambus
 
 ## Resources
 
-Project homepage: http://www.telize.com
+Project homepage: https://www.telize.com
 
 Latest tarball release: http://www.statdns.com/telize/telize-1.07.tar.gz
 
@@ -209,4 +209,4 @@ GitHub: https://github.com/fcambus/telize
 
 [1]: https://github.com/openresty/lua-nginx-module
 [2]: http://dev.maxmind.com/geoip/legacy/geolite/
-[3]: http://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/
+[3]: https://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/
