@@ -3,11 +3,11 @@
 ###############################################################################
 #                                                                             #
 # Telize 1.07                                                                 #
-# Copyright (c) 2013-2016, Frederic Cambus                                    #
+# Copyright (c) 2013-2017, Frederic Cambus                                    #
 # https://www.telize.com                                                      #
 #                                                                             #
 # Created: 2013-08-15                                                         #
-# Last Updated: 2016-11-22                                                    #
+# Last Updated: 2017-02-07                                                    #
 #                                                                             #
 # Telize is released under the BSD 2-Clause license.                          #
 # See LICENSE file for details.                                               #
