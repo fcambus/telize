@@ -197,7 +197,6 @@ for details.
 Telize is developed by Frederic Cambus.
 
 - Site: https://www.cambus.net
-- Twitter: https://twitter.com/fcambus
 
 ## Resources
 
