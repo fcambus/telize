@@ -20,7 +20,7 @@ Telize is a REST API built on Nginx and Lua allowing to get a visitor IP
 address and to query location information from any IP address. It outputs
 JSON-encoded IP geolocation data, and supports both JSON and JSONP.
 
-Geolocation operations are performed using Nginx GeoIP module which caches
+Geolocation operations are performed using Nginx GeoIP2 module which caches
 the database in RAM. Therefore, Telize has very minimal overhead and should
 be blazing fast.
 
@@ -30,9 +30,9 @@ be blazing fast.
 
 Telize requires Nginx 1.7.4+ compiled with the following modules:
 
-- GeoIP (Optional HTTP module: --with-http_geoip_module)
-- HttpRealipModule (Optional HTTP module: --with-http_realip_module)
-- HttpLuaModule 0.9.17+ (Third party module: [ngx_lua][1])
+- HTTP Real IP module (Optional HTTP module: --with-http_realip_module)
+- HTTP Lua module 0.9.17+ (Third party module: [ngx_http_lua_module][1])
+- Nginx GeoIP2 module (Third party module: [ngx_http_geoip2_module][2])
 
 For maximum performance, please make sure the HttpLuaModule is compiled
 against LuaJIT:
@@ -51,64 +51,48 @@ Installing via LuaRocks:
 
 Alternatively, this module can be installed directly using binary packages.
 
-### GeoIP databases
+### GeoIP2 databases
 
-Telize requires the free [GeoLite databases][2] from MaxMind.
-
-#### For IPv4 support only
+Telize requires the free [GeoLite2 databases][3] from MaxMind.
 
 	mkdir -p /var/db/GeoIP
 	cd /var/db/GeoIP
-	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
-	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
-	wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz
-	gunzip *gz
-
-#### For IPv4 and IPv6 support
-
-	mkdir -p /var/db/GeoIP
-	cd /var/db/GeoIP
-	wget http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz
-	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
-	wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNumv6.dat.gz
-	gunzip *gz
+	ftp http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+	ftp http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz
+	tar xfz GeoLite2-City.tar.gz
+	tar xfz GeoLite2-ASN.tar.gz
+	mv */*mmdb .
 
 ## Installation
 
-Copy `timezone.conf` and `timezone-offset.conf` in the Nginx configuration
-files directory.
+Copy `timezone-offset.conf` in the Nginx configuration files directory.
 
-Edit `nginx.conf` to include `timezone.conf`, `timezone-offset.conf` and to
-add directives specifying the path to the GeoIP database files, within the
-http block.
-
-#### For IPv4 support only
+Edit `nginx.conf` to include `timezone-offset.conf` and to add directives
+specifying the path to the GeoIP2 database files, within the http block.
 
 	http {
 
 		...
 
-		include        /etc/nginx/timezone.conf;
 		include        /etc/nginx/timezone-offset.conf;
 
-		geoip_country  /var/db/GeoIP/GeoIP.dat;
-		geoip_city     /var/db/GeoIP/GeoLiteCity.dat;
-		geoip_org      /var/db/GeoIP/GeoIPASNum.dat;
-	}
+		geoip2 /var/db/GeoIP/GeoLite2-City.mmdb {
+			$geoip2_continent_code continent code;
+			$geoip2_country country names en;
+			$geoip2_country_code country iso_code;
+			$geoip2_region subdivisions 0 names en;
+			$geoip2_region_code subdivisions 0 iso_code;
+			$geoip2_city city names en;
+			$geoip2_postal_code postal code;
+			$geoip2_latitude location latitude;
+			$geoip2_longitude location longitude;
+			$geoip2_timezone location time_zone;
+		}
 
-#### For IPv4 and IPv6 support (requires at least Nginx 1.3.12)
-
-	http {
-
-		...
-
-		include        /etc/nginx/timezone.conf;
-		include        /etc/nginx/timezone-offset.conf;
-
-		geoip_country  /var/db/GeoIP/GeoIPv6.dat;
-		geoip_city     /var/db/GeoIP/GeoLiteCityv6.dat;
-		geoip_org      /var/db/GeoIP/GeoIPASNumv6.dat;
-	}
+		geoip2 /var/db/GeoIP/GeoLite2-ASN.mmdb {
+			$geoip2_asn autonomous_system_number;
+			$geoip2_organization autonomous_system_organization;
+		}
 
 Then deploy the API configuration file `telize` to the appropriate location
 on your system, and reload Nginx configuration. If you are behind a load
@@ -131,7 +115,7 @@ The default Telize configuration does not have logging enabled, it must be
 configured manually.
 
 If your Telize instance produces lots of logs, this might be of interest:
-[Log rotation directly within Nginx configuration file][3].
+[Log rotation directly within Nginx configuration file][4].
 
 ## Telize and Load Balancers
 
@@ -205,5 +189,6 @@ Latest tarball release: https://www.statdns.com/telize/telize-1.07.tar.gz
 GitHub: https://github.com/fcambus/telize
 
 [1]: https://github.com/openresty/lua-nginx-module
-[2]: http://dev.maxmind.com/geoip/legacy/geolite/
-[3]: https://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/
+[2]: https://github.com/leev/ngx_http_geoip2_module
+[3]: https://dev.maxmind.com/geoip/geoip2/geolite2/
+[4]: https://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/
