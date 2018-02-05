@@ -41,17 +41,15 @@ against LuaJIT:
 
 ### Lua modules
 
-Telize requires the following Lua modules:
+Telize requires the following Lua module:
 
 - Lua CJSON
-- Lua iconv
 
 Installing via LuaRocks:
 
 	luarocks install lua-cjson
-	luarocks install lua-iconv
 
-Alternatively, those modules can be installed directly using binary packages.
+Alternatively, this module can be installed directly using binary packages.
 
 ### GeoIP databases
 

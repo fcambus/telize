@@ -88,8 +88,6 @@ server {
 
 		content_by_lua_block {
 			local cjson = require("cjson")
-			local iconv = require("iconv")
-			local cd = iconv.new("utf-8","iso-8859-15")
 
 			ngx.header["Cache-Control"] = "no-cache";
 
@@ -135,21 +133,6 @@ server {
 			if payload.latitude ~= nil and payload.longitude ~= nil then
 				payload.latitude = tonumber(payload.latitude)
 				payload.longitude = tonumber(payload.longitude)
-			end
-
-			-- Convert city name to UTF-8 if it exists
-			if payload.city ~= nil then
-				payload.city = cd:iconv(payload.city)
-			end
-
-			-- Convert region name to UTF-8 if it exists
-			if payload.region ~= nil then
-				payload.region = cd:iconv(payload.region)
-			end
-
-			-- Convert organization name to UTF-8 if it exists
-			if payload.organization ~= nil then
-				payload.organization = cd:iconv(payload.organization)
 			end
 
 			local json = cjson.encode(payload)
