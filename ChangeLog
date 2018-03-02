@@ -1,3 +1,14 @@
+Telize 2.00 (2018-??-??)
+
+- Switch to using GeoIP2/GeoLite2 databases
+- Drop dependency on the Lua iconv module, GeoIP2/GeoLite2 databases are
+  encoded as UTF-8
+- Drop timezone.conf, GeoIP2/GeoLite2 databases contain time zones for each
+  location
+- Rename telize to telize.conf
+
+
+
 Telize 1.07 (2016-11-22)
 
 - The timezone offset generator has been rewritten in Lua
