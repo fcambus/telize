@@ -505,7 +505,7 @@ local timezones = {
 
 local utcnow = luatz.time ()
 
-print("map $geoip2_timezone $geoip2_timezone_offset {")
+print("map $geoip2_timezone $geoip2_offset {")
 
 for loop, timezone in ipairs(timezones) do
 	print('\t"' .. timezone .. '" ' ..
