@@ -362,7 +362,7 @@ print("map $geoip_timezone $geoip_timezone_offset {")
 
 for loop, timezone in ipairs(timezones) do
 	print('\t"' .. timezone .. '" ' ..
-	    luatz.get_tz(timezone):find_current(utcnow).gmtoff/3600 .. ';')
+	    luatz.get_tz(timezone):find_current(utcnow).gmtoff .. ';')
 end
 
 print("}")
