@@ -94,9 +94,9 @@ specifying the path to the GeoIP2 database files, within the http block.
 			$geoip2_organization autonomous_system_organization;
 		}
 
-Then deploy the API configuration file `telize` to the appropriate location
-on your system, and reload Nginx configuration. If you are behind a load
-balancer, read the next section.
+Then deploy the API configuration file `telize.conf` to the appropriate
+location on your system, and reload Nginx configuration. If you are behind
+a load balancer, read the next section.
 
 Depending on existing configuration, default values of `map_hash_max_size`
 and `map_hash_bucket_size` variables might be too low and Nginx will refuse
@@ -136,7 +136,7 @@ By the following directive:
 ## CORS Support (Cross-origin resource sharing)
 
 Telize has CORS enabled by default since version 1.02. The following variables
-defines CORS behavior, within the `telize` configuration file.
+defines CORS behavior, within the `telize.conf` configuration file.
 
 	set $cors "true";
 	set $cors_origin "*";
