@@ -136,7 +136,7 @@ By the following directive:
 ## CORS Support (Cross-origin resource sharing)
 
 Telize has CORS enabled by default since version 1.02. The following variables
-defines CORS behavior, within the `telize.conf` configuration file.
+define CORS behavior, within the `telize.conf` configuration file.
 
 	set $cors "true";
 	set $cors_origin "*";
