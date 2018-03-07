@@ -1,4 +1,4 @@
-Telize 2.00 (2018-??-??)
+Telize 2.00 (2018-03-??)
 
 - Switch to using GeoIP2/GeoLite2 databases
 - Drop dependency on the Lua iconv module, GeoIP2/GeoLite2 databases are
@@ -6,6 +6,14 @@ Telize 2.00 (2018-??-??)
 - Drop timezone.conf, GeoIP2/GeoLite2 databases contain time zones for each
   location
 - Rename telize to telize.conf
+- Convert ASN to numeric value
+- Generate timezone offsets as numeric values
+- Generate timezone offsets in seconds
+- Update timezones list
+- Rename 'offset' field to 'timezone_offset'
+- Add support for CORS in the 'jsonip' endpoint
+- Rename the 'geoip' endpoint to 'location'
+- Add Cache-Control header in the 'jsonip' endpoint as well
 
 
 
