@@ -74,6 +74,7 @@ specifying the path to the GeoIP2 database files, within the http block.
 
 		...
 
+		include        /etc/nginx/country-code3.conf;
 		include        /etc/nginx/timezone-offset.conf;
 
 		geoip2 /var/db/GeoIP/GeoLite2-City.mmdb {
