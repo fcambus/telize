@@ -126,7 +126,7 @@ in the server block and set the load balancer IP range accordingly:
 	# set_real_ip_from 10.0.0.0/8; # Put your load balancer IP range here
 	# real_ip_header X-Forwarded-For;
 
-In the `/geoip` location, replace this directive:
+In the `/location` endpoint, replace this directive:
 
 	proxy_set_header X-Real-IP $ip;
 
@@ -161,14 +161,14 @@ the project site.
 Calling the API endpoint without any parameter will return the visitor
 IP address:
 
-- Example (JSON): http://127.0.0.1/geoip
-- Example (JSONP): http://127.0.0.1/geoip?callback=getgeoip
+- Example (JSON): http://127.0.0.1/location
+- Example (JSONP): http://127.0.0.1/location?callback=getgeoip
 
 Appending an IP address as parameter will return location information for
 this IP address:
 
-- Example (JSON): http://127.0.0.1/geoip/46.19.37.108
-- Example (JSONP): http://127.0.0.1/geoip/46.19.37.108?callback=getgeoip
+- Example (JSON): http://127.0.0.1/location/46.19.37.108
+- Example (JSONP): http://127.0.0.1/location/46.19.37.108?callback=getgeoip
 
 ## License
 
