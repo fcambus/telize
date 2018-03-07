@@ -7,7 +7,7 @@
 # https://www.telize.com                                                      #
 #                                                                             #
 # Created: 2013-08-15                                                         #
-# Last Updated: 2018-03-03                                                    #
+# Last Updated: 2018-03-07                                                    #
 #                                                                             #
 # Telize is released under the BSD 2-Clause license.                          #
 # See LICENSE file for details.                                               #
@@ -505,7 +505,7 @@ local timezones = {
 
 local utcnow = luatz.time ()
 
-print("map $geoip2_timezone $geoip2_timezone_offset {")
+print("map $geoip2_timezone $geoip2_offset {")
 
 for loop, timezone in ipairs(timezones) do
 	print('\t"' .. timezone .. '" ' ..

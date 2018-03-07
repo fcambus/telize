@@ -10,7 +10,6 @@ Telize 2.00 (2018-03-??)
 - Generate timezone offsets as numeric values
 - Generate timezone offsets in seconds
 - Update timezones list
-- Rename 'offset' field to 'timezone_offset'
 - Add support for CORS in the 'jsonip' endpoint
 - Rename the 'geoip' endpoint to 'location'
 - Add Cache-Control header in the 'jsonip' endpoint as well
