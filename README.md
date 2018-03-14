@@ -30,11 +30,11 @@ be blazing fast.
 
 Telize requires Nginx 1.7.4+ compiled with the following modules:
 
-- HTTP Real IP module (Optional HTTP module: --with-http_realip_module)
-- HTTP Lua module 0.9.17+ (Third party module: [ngx_http_lua_module][1])
-- Nginx GeoIP2 module (Third party module: [ngx_http_geoip2_module][2])
+- Real IP module (Optional HTTP module: --with-http_realip_module)
+- Lua module 0.9.17+ (Third party module: [ngx_http_lua_module][1])
+- GeoIP2 module (Third party module: [ngx_http_geoip2_module][2])
 
-For maximum performance, please make sure the HttpLuaModule is compiled
+For optimal performance, please make sure the HttpLuaModule is built
 against LuaJIT:
 
 	ldd $(which nginx) | grep lua
@@ -49,7 +49,8 @@ Installing via LuaRocks:
 
 	luarocks install lua-cjson
 
-Alternatively, this module can be installed directly using binary packages.
+Alternatively, this module can be installed directly via the operating
+system's package manager.
 
 ### GeoIP2 databases
 
@@ -65,17 +66,17 @@ Telize requires the free [GeoLite2 databases][3] from MaxMind.
 
 ## Installation
 
-Copy `timezone-offset.conf` in the Nginx configuration files directory.
+Copy both `country-code3.conf` and `timezone-offset.conf` in the Nginx
+configuration files directory.
 
-Edit `nginx.conf` to include `timezone-offset.conf` and to add directives
+Edit `nginx.conf` to include those configuration files and to add directives
 specifying the path to the GeoIP2 database files, within the http block.
 
 	http {
-
 		...
 
-		include        /etc/nginx/country-code3.conf;
-		include        /etc/nginx/timezone-offset.conf;
+		include /etc/nginx/country-code3.conf;
+		include /etc/nginx/timezone-offset.conf;
 
 		geoip2 /var/db/GeoIP/GeoLite2-City.mmdb {
 			$geoip2_continent_code continent code;
@@ -94,14 +95,17 @@ specifying the path to the GeoIP2 database files, within the http block.
 			$geoip2_asn autonomous_system_number;
 			$geoip2_organization autonomous_system_organization;
 		}
+	}
 
 Then deploy the API configuration file `telize.conf` to the appropriate
-location on your system, and reload Nginx configuration. If you are behind
-a load balancer, read the next section.
+location on your system, and reload Nginx configuration. If Telize is
+deployed behind a load balancer, read the next section.
 
 Depending on existing configuration, default values of `map_hash_max_size`
 and `map_hash_bucket_size` variables might be too low and Nginx will refuse
-to start. If this happens, please add the following in the `http` block.
+to start.
+
+If this happens, please add the following directives in the `http` block:
 
 	map_hash_max_size 8192;
 	map_hash_bucket_size 64;
@@ -144,8 +148,8 @@ define CORS behavior, within the `telize.conf` configuration file.
 
 ## Usage
 
-For complete API documentation and JavaScript API usage examples, please check
-the project site.
+For complete API documentation and usage examples, please check the
+project site.
 
 ### Get IP address in Plain text format
 
@@ -165,7 +169,7 @@ IP address:
 - Example (JSONP): http://127.0.0.1/location?callback=getgeoip
 
 Appending an IP address as parameter will return location information for
-this IP address:
+the given address:
 
 - Example (JSON): http://127.0.0.1/location/46.19.37.108
 - Example (JSONP): http://127.0.0.1/location/46.19.37.108?callback=getgeoip
