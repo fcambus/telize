@@ -1,14 +1,17 @@
-Telize 2.00 (2018-03-??)
+Telize 2.0.0 (2018-03-14)
 
 - Switch to using GeoIP2/GeoLite2 databases
+- The 'region_code' field is now in the ISO-3166-2 format for all countries
+- The 'organization' field now only contains organization name, Autonomous
+  System Numbers are now provided as a separate 'asn' field in numeric value
+- Timezone offsets ('offset' field) are now generated as numeric values
+  and in seconds
+- The 'area_code' and 'dma_code' are not provided anymore
 - Drop dependency on the Lua iconv module, GeoIP2/GeoLite2 databases are
   encoded as UTF-8
 - Drop timezone.conf, GeoIP2/GeoLite2 databases contain time zones for each
   location
 - Rename telize to telize.conf
-- Convert ASN to numeric value
-- Generate timezone offsets as numeric values
-- Generate timezone offsets in seconds
 - Update timezones list
 - Add support for CORS in the 'jsonip' endpoint
 - Rename the 'geoip' endpoint to 'location'
