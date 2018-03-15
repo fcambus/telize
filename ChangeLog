@@ -1,4 +1,4 @@
-Telize 2.0.0 (2018-03-14)
+Telize 2.0.0 (2018-03-15)
 
 - Switch to using GeoIP2/GeoLite2 databases
 - The 'region_code' field is now in the ISO-3166-2 format for all countries

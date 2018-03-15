@@ -189,7 +189,7 @@ Telize is developed by Frederic Cambus.
 
 Project homepage: https://www.telize.com
 
-Latest tarball release: https://www.statdns.com/telize/telize-1.07.tar.gz
+Latest tarball release: https://www.statdns.com/telize/telize-2.0.0.tar.gz
 
 GitHub: https://github.com/fcambus/telize
 
