@@ -22,7 +22,8 @@ int		ip(struct http_request *);
 int
 ip(struct http_request *req)
 {
-	char addr[INET6_ADDRSTRLEN];
+	const char *visitor_ip;
+	char *ip, addr[INET6_ADDRSTRLEN];
 
 	if (req->owner->addrtype == AF_INET) {
 		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv4.sin_addr), addr, sizeof(addr));
@@ -30,7 +31,13 @@ ip(struct http_request *req)
 		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv6.sin6_addr), addr, sizeof(addr));
 	}
 
-	http_response(req, 200, addr, strlen(addr));
+	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
+		ip = kore_strdup(visitor_ip);
+	} else {
+		ip = addr;
+	}
+
+	http_response(req, 200, ip, strlen(ip));
 
 	return (KORE_RESULT_OK);
 }
