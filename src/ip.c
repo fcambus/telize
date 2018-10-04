@@ -37,6 +37,7 @@ ip(struct http_request *req)
 		ip = addr;
 	}
 
+	http_response_header(req, "content-type", "text/plain");
 	http_response(req, 200, ip, strlen(ip));
 
 	return (KORE_RESULT_OK);
