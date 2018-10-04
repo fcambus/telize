@@ -51,7 +51,7 @@ jsonip(struct http_request *req)
 		answer = json;
 	}
 
-	http_response_header(req, "content-type", "application/json");
+	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
 
 	return (KORE_RESULT_OK);
