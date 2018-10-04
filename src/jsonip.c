@@ -25,8 +25,10 @@ int
 jsonip(struct http_request *req)
 {
 	const char *visitor_ip;
-	char *answer, *ip, addr[INET6_ADDRSTRLEN];
+	char *answer, *callback, *json, *ip, addr[INET6_ADDRSTRLEN];
 	json_t *output = json_object();
+
+	http_populate_get(req);
 
 	if (req->owner->addrtype == AF_INET) {
 		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv4.sin_addr), addr, sizeof(addr));
@@ -41,7 +43,13 @@ jsonip(struct http_request *req)
 	}
 
 	json_object_set_new(output, "ip", json_string(ip));
-	answer = json_dumps(output, JSON_INDENT(3));
+	json = json_dumps(output, JSON_INDENT(3));
+
+	if (http_argument_get_string(req, "callback", &callback)) {
+		asprintf(&answer, "%s(%s);", callback, json);
+	} else {
+		answer = json;
+	}
 
 	http_response_header(req, "content-type", "application/json");
 	http_response(req, 200, answer, strlen(answer));
