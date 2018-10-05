@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-04                                                  */
+/* Last Updated: 2018-10-05                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -25,10 +25,12 @@ int
 jsonip(struct http_request *req)
 {
 	const char *visitor_ip;
-	char *answer, *callback, *json, *ip, addr[INET6_ADDRSTRLEN];
+	char *answer, *callback, *json, *ip, *addr;
 	json_t *output = json_object();
 
 	http_populate_get(req);
+
+	addr = kore_malloc(INET6_ADDRSTRLEN);
 
 	if (req->owner->addrtype == AF_INET) {
 		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv4.sin_addr), addr, sizeof(addr));
@@ -53,6 +55,8 @@ jsonip(struct http_request *req)
 
 	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
+
+	kore_free(addr);
 
 	return (KORE_RESULT_OK);
 }
