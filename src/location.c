@@ -20,7 +20,29 @@
 #include <jansson.h>
 #include <maxminddb.h>
 
+MMDB_s asn;
+MMDB_s city;
+
+int		init(int);
 int		location(struct http_request *);
+
+int
+init(int state)
+{
+	if (MMDB_open("/var/db/GeoIP/GeoLite2-City.mmdb",
+	    MMDB_MODE_MMAP, &city) != MMDB_SUCCESS) {
+		kore_log(LOG_ERR, "can't open GeoLite2 City database: %s", errno_s);
+		return (KORE_RESULT_ERROR);
+	}
+
+	if (MMDB_open("/var/db/GeoIP/GeoLite2-ASN.mmdb",
+	    MMDB_MODE_MMAP, &asn) != MMDB_SUCCESS) {
+		kore_log(LOG_ERR, "can't open GeoLite2 ASN database: %s", errno_s);
+		return (KORE_RESULT_ERROR);
+	}
+
+	return (KORE_RESULT_OK);
+}
 
 int
 location(struct http_request *req)
