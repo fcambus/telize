@@ -128,6 +128,19 @@ location(struct http_request *req)
 		json_object_set_new(output, "offset", json_integer(info->tm_gmtoff));
 	}
 
+	/* GeoLite2 ASN lookup */
+	lookup = MMDB_lookup_string(&asn, ip, &gai_error, &mmdb_error);
+
+	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_number", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "asn", json_integer(entry_data.uint32));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_organization", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "organization", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+	}
+
 	json = json_dumps(output, JSON_INDENT(3));
 
 	if (http_argument_get_string(req, "callback", &callback)) {
