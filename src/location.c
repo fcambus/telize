@@ -74,6 +74,50 @@ location(struct http_request *req)
 	/* GeoLite2 City lookup */
 	lookup = MMDB_lookup_string(&city, ip, &gai_error, &mmdb_error);
 
+	MMDB_get_value(&lookup.entry, &entry_data, "continent", "code", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output,"continent_code",
+				    json_string(strndup(entry_data.utf8_string,
+							entry_data.data_size)));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "country", "names", "en", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "country",
+				    json_string(strndup(entry_data.utf8_string,
+							entry_data.data_size)));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "country", "iso_code", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "country_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "city", "names", "en", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "city", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "postal", "code", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "postal_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "location", "latitude", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "latitude", json_real(entry_data.double_value));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "location", "longitude", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "longitude", json_real(entry_data.double_value));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "location", "time_zone", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "timezone", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+	}
+
 	json = json_dumps(output, JSON_INDENT(3));
 
 	if (http_argument_get_string(req, "callback", &callback)) {
