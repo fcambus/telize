@@ -51,6 +51,10 @@ location(struct http_request *req)
 	char *answer, *callback, *json, *ip, addr[INET6_ADDRSTRLEN];
 	json_t *output = json_object();
 
+	int gai_error, mmdb_error;
+	MMDB_lookup_result_s lookup;
+	MMDB_entry_data_s entry_data;
+
 	http_populate_get(req);
 
 	if (req->owner->addrtype == AF_INET) {
@@ -66,6 +70,10 @@ location(struct http_request *req)
 	}
 
 	json_object_set_new(output, "ip", json_string(ip));
+
+	/* GeoLite2 City lookup */
+	lookup = MMDB_lookup_string(&city, ip, &gai_error, &mmdb_error);
+
 	json = json_dumps(output, JSON_INDENT(3));
 
 	if (http_argument_get_string(req, "callback", &callback)) {
