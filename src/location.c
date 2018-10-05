@@ -12,6 +12,7 @@
 /*                                                                           */
 /*****************************************************************************/
 
+#include <time.h>
 #include <sys/socket.h>
 
 #include <kore/kore.h>
@@ -54,6 +55,9 @@ location(struct http_request *req)
 	int gai_error, mmdb_error;
 	MMDB_lookup_result_s lookup;
 	MMDB_entry_data_s entry_data;
+
+	time_t rawtime;
+	struct tm *info;
 
 	http_populate_get(req);
 
@@ -116,6 +120,12 @@ location(struct http_request *req)
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "time_zone", NULL);
 	if (entry_data.has_data) {
 		json_object_set_new(output, "timezone", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+
+		setenv("TZ", strndup(entry_data.utf8_string, entry_data.data_size), 1);
+		tzset();
+		time(&rawtime);
+		info = localtime(&rawtime);
+		json_object_set_new(output, "offset", json_integer(info->tm_gmtoff));
 	}
 
 	json = json_dumps(output, JSON_INDENT(3));
