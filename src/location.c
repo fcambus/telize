@@ -18,6 +18,7 @@
 #include <kore/http.h>
 
 #include <jansson.h>
+#include <maxminddb.h>
 
 int		location(struct http_request *);
 
