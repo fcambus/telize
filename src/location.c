@@ -100,6 +100,16 @@ location(struct http_request *req)
 		json_object_set_new(output, "country_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
 	}
 
+	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "names", "en", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "region", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+	}
+
+	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "iso_code", NULL);
+	if (entry_data.has_data) {
+		json_object_set_new(output, "region_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+	}
+
 	MMDB_get_value(&lookup.entry, &entry_data, "city", "names", "en", NULL);
 	if (entry_data.has_data) {
 		json_object_set_new(output, "city", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
