@@ -155,6 +155,7 @@ location(struct http_request *req)
 	http_response(req, 200, answer, strlen(answer));
 
 	kore_free(addr);
+	free(answer);
 
 	return (KORE_RESULT_OK);
 }

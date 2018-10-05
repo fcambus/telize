@@ -56,6 +56,7 @@ jsonip(struct http_request *req)
 	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
 
+	free(answer);
 	kore_free(addr);
 
 	return (KORE_RESULT_OK);
