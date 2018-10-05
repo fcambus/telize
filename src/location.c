@@ -145,6 +145,7 @@ location(struct http_request *req)
 	}
 
 	json = json_dumps(output, JSON_INDENT(3));
+	free(output);
 
 	if (http_argument_get_string(req, "callback", &callback)) {
 		asprintf(&answer, "%s(%s);", callback, json);

@@ -47,6 +47,7 @@ jsonip(struct http_request *req)
 
 	json_object_set_new(output, "ip", json_string(ip));
 	json = json_dumps(output, JSON_INDENT(3));
+	free(output);
 
 	if (http_argument_get_string(req, "callback", &callback)) {
 		asprintf(&answer, "%s(%s);", callback, json);
