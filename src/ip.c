@@ -22,8 +22,8 @@ int		ip(struct http_request *);
 int
 ip(struct http_request *req)
 {
-	const char *visitor_ip;
-	char *ip, *addr;
+	const char *visitor_ip, *ip;
+	char *addr;
 
 	addr = kore_malloc(INET6_ADDRSTRLEN);
 
@@ -34,7 +34,7 @@ ip(struct http_request *req)
 	}
 
 	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
-		ip = kore_strdup(visitor_ip);
+		ip = visitor_ip;
 	} else {
 		ip = addr;
 	}

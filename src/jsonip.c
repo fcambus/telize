@@ -25,8 +25,8 @@ int		jsonip(struct http_request *);
 int
 jsonip(struct http_request *req)
 {
-	const char *visitor_ip;
-	char *answer, *callback, *json, *ip, *addr;
+	const char *visitor_ip, *ip;
+	char *answer, *callback, *json, *addr;
 	json_t *output = json_object();
 
 	http_populate_get(req);
@@ -40,7 +40,7 @@ jsonip(struct http_request *req)
 	}
 
 	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
-		ip = kore_strdup(visitor_ip);
+		ip = visitor_ip;
 	} else {
 		ip = addr;
 	}
