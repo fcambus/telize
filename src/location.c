@@ -165,6 +165,10 @@ location(struct http_request *req)
 		answer = json;
 	}
 
+	// CORS
+	http_response_header(req, "Access-Control-Allow-Origin", "*");
+	http_response_header(req, "Cache-Control", "no-cache");
+
 	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
 
