@@ -13,6 +13,7 @@
 /*****************************************************************************/
 
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 #include <sys/socket.h>
 
@@ -71,6 +72,7 @@ location(struct http_request *req)
 	}
 
 	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
+		strtok(visitor_ip, ",");
 		ip = visitor_ip;
 	} else {
 		ip = addr;
