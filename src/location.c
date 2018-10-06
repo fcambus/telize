@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-05                                                  */
+/* Last Updated: 2018-10-06                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -22,6 +22,8 @@
 
 #include <jansson.h>
 #include <maxminddb.h>
+
+#include "location.h"
 
 MMDB_s asn;
 MMDB_s city;
@@ -100,6 +102,13 @@ location(struct http_request *req)
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "iso_code", NULL);
 	if (entry_data.has_data) {
 		json_object_set_new(output, "country_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+
+		for (size_t loop = 0; loop < COUNTRIES; loop++) {
+			if (!strncmp(country_code[loop], entry_data.utf8_string, 2)) {
+				json_object_set_new(output, "country_code3", json_string(country_code3[loop]));
+				break;
+			}
+		}
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "names", "en", NULL);
