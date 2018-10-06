@@ -156,7 +156,7 @@ location(struct http_request *req)
 		json_object_set_new(output, "organization", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
 	}
 
-	json = json_dumps(output, JSON_INDENT(3));
+	json = json_dumps(output, JSON_INDENT(3) | JSON_ESCAPE_SLASH);
 	free(output);
 
 	if (http_argument_get_string(req, "callback", &callback)) {
