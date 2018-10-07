@@ -93,71 +93,55 @@ location(struct http_request *req)
 	lookup = MMDB_lookup_string(&city, ip, &gai_error, &mmdb_error);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "continent", "code", NULL);
-	if (entry_data.has_data) {
-		char *continent_code = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"continent_code\":\"%s\"", continent_code);
-		free(continent_code);
-	}
+	if (entry_data.has_data)
+		kore_buf_appendf(&json, ",\"continent_code\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "names", "en", NULL);
-	if (entry_data.has_data) {
-		char *country = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"country\":\"%s\"", country);
-		free(country);
-	}
+	if (entry_data.has_data)
+		kore_buf_appendf(&json, ",\"country\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "iso_code", NULL);
 	if (entry_data.has_data) {
-		char *country_code = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"country_code\":\"%s\"", country_code);
+		kore_buf_appendf(&json, ",\"country_code\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 		for (size_t loop = 0; loop < COUNTRIES; loop++) {
-			if (!strncmp(country_code_array[loop], country_code, 2)) {
+			if (!strncmp(country_code_array[loop], entry_data.utf8_string, 2)) {
 				kore_buf_appendf(&json, ",\"country_code3\":\"%s\"", country_code3_array[loop]);
 				break;
 			}
 		}
-
-		free(country_code);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "names", "en", NULL);
-	if (entry_data.has_data) {
-		char *region = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"region\":\"%s\"", region);
-		free(region);
-	}
+	if (entry_data.has_data)
+		kore_buf_appendf(&json, ",\"region\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "iso_code", NULL);
-	if (entry_data.has_data) {
-		char *region_code = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"region_code\":\"%s\"", region_code);
-		free(region_code);
-	}
+	if (entry_data.has_data)
+		kore_buf_appendf(&json, ",\"region_code\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "city", "names", "en", NULL);
-	if (entry_data.has_data) {
-		char *city_value = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"city\":\"%s\"", city_value);
-		free(city_value);
-	}
+	if (entry_data.has_data)
+		kore_buf_appendf(&json, ",\"city\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "postal", "code", NULL);
-	if (entry_data.has_data) {
-		char *postal_code = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"postal_code\":\"%s\"", postal_code);
-		free(postal_code);
-	}
+	if (entry_data.has_data)
+		kore_buf_appendf(&json, ",\"postal_code\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "latitude", NULL);
-	if (entry_data.has_data) {
+	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"latitude\":%.4f", entry_data.double_value);
-	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "longitude", NULL);
-	if (entry_data.has_data) {
+	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"longitude\":%.4f", entry_data.double_value);
-	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "time_zone", NULL);
 	if (entry_data.has_data) {
@@ -177,16 +161,13 @@ location(struct http_request *req)
 	lookup = MMDB_lookup_string(&asn, ip, &gai_error, &mmdb_error);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_number", NULL);
-	if (entry_data.has_data) {
+	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"asn\":%d", entry_data.uint32);
-	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_organization", NULL);
-	if (entry_data.has_data) {
-		char *organization= strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"organization\":\"%s\"", organization);
-		free(organization);
-	}
+	if (entry_data.has_data)
+		kore_buf_appendf(&json, ",\"organization\":\"%.*s\"",
+				entry_data.data_size, entry_data.utf8_string);
 
 	kore_buf_append(&json, is_callback ? "});\n" : "}\n", is_callback ? 4 : 2);
 	answer = kore_buf_stringify(&json, NULL);
