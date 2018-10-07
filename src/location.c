@@ -65,7 +65,7 @@ location(struct http_request *req)
 	http_populate_get(req);
 
 	struct kore_buf json;
-	kore_buf_init(&json, 0);
+	kore_buf_init(&json, 4096);
 
 	addr = kore_malloc(INET6_ADDRSTRLEN);
 
