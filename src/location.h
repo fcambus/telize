@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-06                                                  */
+/* Last Updated: 2018-10-07                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -14,7 +14,7 @@
 
 #define COUNTRIES 251
 
-char *country_code[] = {
+char *country_code_array[] = {
 	"AD", "AE", "AF", "AG", "AI", "AL", "AM", "AN", "AO", "AQ", "AR", "AS",
 	"AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH",
 	"BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW",
@@ -38,7 +38,7 @@ char *country_code[] = {
 	"VI", "VN", "VU", "WF", "WS", "XK", "YE", "YT", "ZA", "ZM", "ZW"
 };
 
-char *country_code3[] = {
+char *country_code3_array[] = {
 	"AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT", "AGO", "ATA",
 	"ARG", "ASM", "AUT", "AUS", "ABW", "ALA", "AZE", "BIH", "BRB", "BGD",
 	"BEL", "BFA", "BGR", "BHR", "BDI", "BEN", "BLM", "BMU", "BRN", "BOL",

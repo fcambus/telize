@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-06                                                  */
+/* Last Updated: 2018-10-07                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -20,7 +20,6 @@
 #include <kore/kore.h>
 #include <kore/http.h>
 
-#include <jansson.h>
 #include <maxminddb.h>
 
 #include "location.h"
@@ -53,8 +52,8 @@ int
 location(struct http_request *req)
 {
 	const char *visitor_ip, *ip;
-	char *answer, *callback, *json, *addr;
-	json_t *output = json_object();
+	char *answer, *callback, *addr;
+	bool is_callback = false;
 
 	int gai_error, mmdb_error;
 	MMDB_lookup_result_s lookup;
@@ -64,6 +63,9 @@ location(struct http_request *req)
 	struct tm *info;
 
 	http_populate_get(req);
+
+	struct kore_buf json;
+	kore_buf_init(&json, 0);
 
 	addr = kore_malloc(INET6_ADDRSTRLEN);
 
@@ -80,76 +82,95 @@ location(struct http_request *req)
 		ip = addr;
 	}
 
-	json_object_set_new(output, "ip", json_string(ip));
+	if (http_argument_get_string(req, "callback", &callback)) {
+		kore_buf_appendf(&json, "%s(", callback);
+		is_callback = true;
+	}
+
+	kore_buf_appendf(&json, "{\"ip\":\"%s\"", ip);
 
 	/* GeoLite2 City lookup */
 	lookup = MMDB_lookup_string(&city, ip, &gai_error, &mmdb_error);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "continent", "code", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output,"continent_code",
-				    json_string(strndup(entry_data.utf8_string,
-							entry_data.data_size)));
+		char *continent_code = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"continent_code\":\"%s\"", continent_code);
+		free(continent_code);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "names", "en", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "country",
-				    json_string(strndup(entry_data.utf8_string,
-							entry_data.data_size)));
+		char *country = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"country\":\"%s\"", country);
+		free(country);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "iso_code", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "country_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+		char *country_code = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"country_code\":\"%s\"", country_code);
 
 		for (size_t loop = 0; loop < COUNTRIES; loop++) {
-			if (!strncmp(country_code[loop], entry_data.utf8_string, 2)) {
-				json_object_set_new(output, "country_code3", json_string(country_code3[loop]));
+			if (!strncmp(country_code_array[loop], country_code, 2)) {
+				kore_buf_appendf(&json, ",\"country_code3\":\"%s\"", country_code3_array[loop]);
 				break;
 			}
 		}
+
+		free(country_code);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "names", "en", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "region", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+		char *region = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"region\":\"%s\"", region);
+		free(region);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "iso_code", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "region_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+		char *region_code = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"region_code\":\"%s\"", region_code);
+		free(region_code);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "city", "names", "en", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "city", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+		char *city_value = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"city\":\"%s\"", city_value);
+		free(city_value);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "postal", "code", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "postal_code", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+		char *postal_code = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"postal_code\":\"%s\"", postal_code);
+		free(postal_code);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "latitude", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "latitude", json_real(entry_data.double_value));
+		kore_buf_appendf(&json, ",\"latitude\":%.4f", entry_data.double_value);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "longitude", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "longitude", json_real(entry_data.double_value));
+		kore_buf_appendf(&json, ",\"longitude\":%.4f", entry_data.double_value);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "time_zone", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "timezone", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+		char *timezone_value = strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"timezone\":\"%s\"", timezone_value);
 
-		setenv("TZ", strndup(entry_data.utf8_string, entry_data.data_size), 1);
+		setenv("TZ", timezone_value, 1);
 		tzset();
 		time(&rawtime);
 		info = localtime(&rawtime);
-		json_object_set_new(output, "offset", json_integer(info->tm_gmtoff));
+		kore_buf_appendf(&json, ",\"offset\":%d", info->tm_gmtoff);
+
+		free(timezone_value);
 	}
 
 	/* GeoLite2 ASN lookup */
@@ -157,22 +178,18 @@ location(struct http_request *req)
 
 	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_number", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "asn", json_integer(entry_data.uint32));
+		kore_buf_appendf(&json, ",\"asn\":%d", entry_data.uint32);
 	}
 
 	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_organization", NULL);
 	if (entry_data.has_data) {
-		json_object_set_new(output, "organization", json_string(strndup(entry_data.utf8_string, entry_data.data_size)));
+		char *organization= strndup(entry_data.utf8_string, entry_data.data_size);
+		kore_buf_appendf(&json, ",\"organization\":\"%s\"", organization);
+		free(organization);
 	}
 
-	json = json_dumps(output, JSON_INDENT(3) | JSON_ESCAPE_SLASH);
-	free(output);
-
-	if (http_argument_get_string(req, "callback", &callback)) {
-		asprintf(&answer, "%s(%s);", callback, json);
-	} else {
-		answer = json;
-	}
+	kore_buf_append(&json, is_callback ? "});\n" : "}\n", is_callback ? 4 : 2);
+	answer = kore_buf_stringify(&json, NULL);
 
 	// CORS
 	http_response_header(req, "Access-Control-Allow-Origin", "*");
@@ -181,8 +198,8 @@ location(struct http_request *req)
 	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
 
+	kore_buf_free(&json);
 	kore_free(addr);
-	free(answer);
 
 	return (KORE_RESULT_OK);
 }
