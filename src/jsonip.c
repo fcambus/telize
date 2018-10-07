@@ -13,13 +13,11 @@
 /*****************************************************************************/
 
 #include <stdio.h>
-#include <string.h>
+#include <stdbool.h>
 #include <sys/socket.h>
 
 #include <kore/kore.h>
 #include <kore/http.h>
-
-#include <jansson.h>
 
 int		jsonip(struct http_request *);
 
@@ -27,10 +25,13 @@ int
 jsonip(struct http_request *req)
 {
 	const char *visitor_ip, *ip;
-	char *answer, *callback, *json, *addr;
-	json_t *output = json_object();
+	char *answer, *callback, *addr;
+	bool is_callback = false;
 
 	http_populate_get(req);
+
+	struct kore_buf json;
+	kore_buf_init(&json, 0);
 
 	addr = kore_malloc(INET6_ADDRSTRLEN);
 
@@ -47,15 +48,15 @@ jsonip(struct http_request *req)
 		ip = addr;
 	}
 
-	json_object_set_new(output, "ip", json_string(ip));
-	json = json_dumps(output, JSON_INDENT(3));
-	free(output);
-
 	if (http_argument_get_string(req, "callback", &callback)) {
-		asprintf(&answer, "%s(%s);", callback, json);
-	} else {
-		answer = json;
+		kore_buf_appendf(&json, "%s(", callback);
+		is_callback = true;
 	}
+
+	kore_buf_appendf(&json, "{\"ip\":\"%s\"", ip);
+
+	kore_buf_append(&json, is_callback ? "});\n" : "}\n", is_callback ? 4 : 2);
+	answer = kore_buf_stringify(&json, NULL);
 
 	// CORS
 	http_response_header(req, "Access-Control-Allow-Origin", "*");
@@ -64,7 +65,7 @@ jsonip(struct http_request *req)
 	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
 
-	free(answer);
+	kore_buf_free(&json);
 	kore_free(addr);
 
 	return (KORE_RESULT_OK);
