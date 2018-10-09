@@ -51,7 +51,7 @@ init(int state)
 int
 location(struct http_request *req)
 {
-	const char *visitor_ip, *ip;
+	const char *custom_ip, *visitor_ip, *ip;
 	char *answer, *callback, *addr;
 	bool is_callback = false;
 
@@ -80,6 +80,14 @@ location(struct http_request *req)
 		ip = visitor_ip;
 	} else {
 		ip = addr;
+	}
+
+	if (req->hdlr->type == HANDLER_TYPE_DYNAMIC) {
+		if ((custom_ip = strrchr(req->path, '/')) != NULL)
+			custom_ip++;
+
+		if (strlen(custom_ip))
+			ip = custom_ip;
 	}
 
 	if (http_argument_get_string(req, "callback", &callback)) {
