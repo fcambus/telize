@@ -62,6 +62,9 @@ location(struct http_request *req)
 	time_t rawtime;
 	struct tm *info;
 
+	struct sockaddr_in ipv4;
+	struct sockaddr_in6 ipv6;
+
 	http_populate_get(req);
 
 	struct kore_buf json;
@@ -88,6 +91,13 @@ location(struct http_request *req)
 
 		if (strlen(custom_ip))
 			ip = custom_ip;
+	}
+
+	// Check for invalid IP addresses
+	if (!inet_pton(AF_INET, ip, &(ipv4.sin_addr)) &&
+	    !inet_pton(AF_INET6, ip, &(ipv6.sin6_addr))) {
+		answer = "{\"code\": 401, \"message\": \"Input string is not a valid IP address\"}";
+		http_response(req, 400, answer, strlen(answer));
 	}
 
 	if (http_argument_get_string(req, "callback", &callback)) {
