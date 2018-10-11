@@ -98,6 +98,7 @@ location(struct http_request *req)
 	    !inet_pton(AF_INET6, ip, &(ipv6.sin6_addr))) {
 		answer = "{\"code\": 401, \"message\": \"Input string is not a valid IP address\"}";
 		http_response(req, 400, answer, strlen(answer));
+		goto cleanup;
 	}
 
 	if (http_argument_get_string(req, "callback", &callback)) {
@@ -197,6 +198,7 @@ location(struct http_request *req)
 	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
 
+cleanup:
 	kore_buf_free(&json);
 	kore_free(addr);
 
