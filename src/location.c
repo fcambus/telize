@@ -35,13 +35,15 @@ init(int state)
 {
 	if (MMDB_open("/var/db/GeoIP/GeoLite2-City.mmdb",
 	    MMDB_MODE_MMAP, &city) != MMDB_SUCCESS) {
-		kore_log(LOG_ERR, "can't open GeoLite2 City database: %s", errno_s);
+		kore_log(LOG_ERR, "can't open GeoLite2 City database: %s",
+		    errno_s);
 		return (KORE_RESULT_ERROR);
 	}
 
 	if (MMDB_open("/var/db/GeoIP/GeoLite2-ASN.mmdb",
 	    MMDB_MODE_MMAP, &asn) != MMDB_SUCCESS) {
-		kore_log(LOG_ERR, "can't open GeoLite2 ASN database: %s", errno_s);
+		kore_log(LOG_ERR, "can't open GeoLite2 ASN database: %s",
+		    errno_s);
 		return (KORE_RESULT_ERROR);
 	}
 
@@ -72,12 +74,15 @@ location(struct http_request *req)
 
 	addr = kore_malloc(INET6_ADDRSTRLEN);
 
-	if (req->owner->addrtype == AF_INET) {
-		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
-	} else {
-		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv6.sin6_addr), addr, INET6_ADDRSTRLEN);
-	}
+	/* IP address of the client originating the request */
+	if (req->owner->addrtype == AF_INET)
+		inet_ntop(req->owner->addrtype,
+		    &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
+	else
+		inet_ntop(req->owner->addrtype,
+		    &(req->owner->addr.ipv6.sin6_addr), addr, INET6_ADDRSTRLEN);
 
+	/* IP address specified in the "X-Forwarded-For" header */
 	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
 		strtok(visitor_ip, ",");
 		ip = visitor_ip;
@@ -85,6 +90,7 @@ location(struct http_request *req)
 		ip = addr;
 	}
 
+	/* Specific IP passed in the URL */
 	if (req->hdlr->type == HANDLER_TYPE_DYNAMIC) {
 		if ((custom_ip = strrchr(req->path, '/')) != NULL)
 			custom_ip++;
@@ -93,7 +99,7 @@ location(struct http_request *req)
 			ip = custom_ip;
 	}
 
-	// Check for invalid IP addresses
+	/* Check for invalid IP addresses */
 	if (!inet_pton(AF_INET, ip, &(ipv4.sin_addr)) &&
 	    !inet_pton(AF_INET6, ip, &(ipv6.sin6_addr))) {
 		answer = "{\"code\": 401, \"message\": \"Input string is not a valid IP address\"}";
@@ -101,6 +107,7 @@ location(struct http_request *req)
 		goto cleanup;
 	}
 
+	/* Handle callback parameter */
 	if (http_argument_get_string(req, "callback", &callback)) {
 		kore_buf_appendf(&json, "%s(", callback);
 		is_callback = true;
@@ -114,17 +121,17 @@ location(struct http_request *req)
 	MMDB_get_value(&lookup.entry, &entry_data, "continent", "code", NULL);
 	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"continent_code\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "names", "en", NULL);
 	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"country\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "iso_code", NULL);
 	if (entry_data.has_data) {
 		kore_buf_appendf(&json, ",\"country_code\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 		for (size_t loop = 0; loop < COUNTRIES; loop++) {
 			if (!strncmp(country_code_array[loop], entry_data.utf8_string, 2)) {
@@ -137,22 +144,22 @@ location(struct http_request *req)
 	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "names", "en", NULL);
 	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"region\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "iso_code", NULL);
 	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"region_code\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "city", "names", "en", NULL);
 	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"city\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "postal", "code", NULL);
 	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"postal_code\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "latitude", NULL);
 	if (entry_data.has_data)
@@ -186,7 +193,7 @@ location(struct http_request *req)
 	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_organization", NULL);
 	if (entry_data.has_data)
 		kore_buf_appendf(&json, ",\"organization\":\"%.*s\"",
-				entry_data.data_size, entry_data.utf8_string);
+		    entry_data.data_size, entry_data.utf8_string);
 
 	kore_buf_append(&json, is_callback ? "});\n" : "}\n", is_callback ? 4 : 2);
 	answer = kore_buf_stringify(&json, NULL);
