@@ -35,6 +35,10 @@ jsonip(struct http_request *req)
 
 	addr = kore_malloc(INET6_ADDRSTRLEN);
 
+	http_response_header(req, "Access-Control-Allow-Origin", "*");
+	http_response_header(req, "Cache-Control", "no-cache");
+	http_response_header(req, "Content-Type", "application/json; charset=utf-8");
+
 	if (req->owner->addrtype == AF_INET) {
 		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
 	} else {
@@ -58,11 +62,6 @@ jsonip(struct http_request *req)
 	kore_buf_append(&json, is_callback ? "});\n" : "}\n", is_callback ? 4 : 2);
 	answer = kore_buf_stringify(&json, NULL);
 
-	// CORS
-	http_response_header(req, "Access-Control-Allow-Origin", "*");
-	http_response_header(req, "Cache-Control", "no-cache");
-
-	http_response_header(req, "content-type", "application/json; charset=utf-8");
 	http_response(req, 200, answer, strlen(answer));
 
 	kore_buf_free(&json);
