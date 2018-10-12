@@ -12,12 +12,12 @@
 /*                                                                           */
 /*****************************************************************************/
 
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <sys/socket.h>
 
-#include <kore/kore.h>
 #include <kore/http.h>
+#include <kore/kore.h>
 
 int		jsonip(struct http_request *);
 

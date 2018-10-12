@@ -15,8 +15,8 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#include <kore/kore.h>
 #include <kore/http.h>
+#include <kore/kore.h>
 
 int		ip(struct http_request *);
 

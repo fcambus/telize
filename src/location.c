@@ -14,11 +14,11 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #include <sys/socket.h>
+#include <time.h>
 
-#include <kore/kore.h>
 #include <kore/http.h>
+#include <kore/kore.h>
 
 #include <maxminddb.h>
 
