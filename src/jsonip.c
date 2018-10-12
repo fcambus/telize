@@ -16,8 +16,8 @@
 #include <stdio.h>
 #include <sys/socket.h>
 
-#include <kore/http.h>
 #include <kore/kore.h>
+#include <kore/http.h>
 
 int		jsonip(struct http_request *);
 
