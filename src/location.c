@@ -24,11 +24,16 @@
 
 #include "location.h"
 
+#define ENTRY_TYPE_UINT32 0
+#define ENTRY_TYPE_STRING 1
+#define ENTRY_TYPE_DOUBLE 2
+
 MMDB_s asn;
 MMDB_s city;
 
 int	init(int);
 int	location(struct http_request *);
+void	getdata(struct kore_buf *, MMDB_lookup_result_s *, MMDB_entry_data_s *, char *, int, ...);
 
 int
 init(int state)
@@ -48,6 +53,30 @@ init(int state)
 	}
 
 	return (KORE_RESULT_OK);
+}
+
+void
+getdata(struct kore_buf *json, MMDB_lookup_result_s *lookup, MMDB_entry_data_s *entry_data, char *field, int type, ...)
+{
+	va_list keys;
+	va_start(keys, entry_data);
+
+	MMDB_vget_value(&lookup->entry, entry_data, keys);
+	if (entry_data->has_data) {
+		switch(type) {
+		case ENTRY_TYPE_UINT32:
+			kore_buf_appendf(json, ",\"%s\":%d", field, entry_data->uint32);
+			break;
+		case ENTRY_TYPE_STRING:
+			kore_buf_appendf(json, ",\"%s\":\"%.*s\"", field, entry_data->data_size, entry_data->utf8_string);
+			break;
+		case ENTRY_TYPE_DOUBLE:
+			kore_buf_appendf(json, ",\"%s\":%.4f", field, entry_data->double_value);
+			break;
+		}
+	}
+
+	va_end(keys);
 }
 
 int
