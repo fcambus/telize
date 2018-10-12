@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-05                                                  */
+/* Last Updated: 2018-10-12                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -19,7 +19,7 @@
 #include <kore/kore.h>
 #include <kore/http.h>
 
-int		jsonip(struct http_request *);
+int	jsonip(struct http_request *);
 
 int
 jsonip(struct http_request *req)

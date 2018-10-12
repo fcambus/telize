@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-07                                                  */
+/* Last Updated: 2018-10-12                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -27,8 +27,8 @@
 MMDB_s asn;
 MMDB_s city;
 
-int		init(int);
-int		location(struct http_request *);
+int	init(int);
+int	location(struct http_request *);
 
 int
 init(int state)
