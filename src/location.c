@@ -152,15 +152,8 @@ location(struct http_request *req)
 	/* GeoLite2 City lookup */
 	lookup = MMDB_lookup_string(&city, ip, &gai_error, &mmdb_error);
 
-	MMDB_get_value(&lookup.entry, &entry_data, "continent", "code", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"continent_code\":\"%.*s\"",
-		    entry_data.data_size, entry_data.utf8_string);
-
-	MMDB_get_value(&lookup.entry, &entry_data, "country", "names", "en", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"country\":\"%.*s\"",
-		    entry_data.data_size, entry_data.utf8_string);
+	getdata(&json, &lookup, &entry_data, "continent_code", ENTRY_TYPE_STRING, "continent", "code", NULL);
+	getdata(&json, &lookup, &entry_data, "country", ENTRY_TYPE_STRING, "country", "names", "en", NULL);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "country", "iso_code", NULL);
 	if (entry_data.has_data) {
@@ -175,33 +168,12 @@ location(struct http_request *req)
 		}
 	}
 
-	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "names", "en", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"region\":\"%.*s\"",
-		    entry_data.data_size, entry_data.utf8_string);
-
-	MMDB_get_value(&lookup.entry, &entry_data, "subdivisions", "0", "iso_code", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"region_code\":\"%.*s\"",
-		    entry_data.data_size, entry_data.utf8_string);
-
-	MMDB_get_value(&lookup.entry, &entry_data, "city", "names", "en", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"city\":\"%.*s\"",
-		    entry_data.data_size, entry_data.utf8_string);
-
-	MMDB_get_value(&lookup.entry, &entry_data, "postal", "code", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"postal_code\":\"%.*s\"",
-		    entry_data.data_size, entry_data.utf8_string);
-
-	MMDB_get_value(&lookup.entry, &entry_data, "location", "latitude", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"latitude\":%.4f", entry_data.double_value);
-
-	MMDB_get_value(&lookup.entry, &entry_data, "location", "longitude", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"longitude\":%.4f", entry_data.double_value);
+	getdata(&json, &lookup, &entry_data, "region", ENTRY_TYPE_STRING, "subdivisions", "0", "names", "en", NULL);
+	getdata(&json, &lookup, &entry_data, "region_code", ENTRY_TYPE_STRING, "subdivisions", "0", "iso_code", NULL);
+	getdata(&json, &lookup, &entry_data, "city", ENTRY_TYPE_STRING, "city", "names", "en", NULL);
+	getdata(&json, &lookup, &entry_data, "postal_code", ENTRY_TYPE_STRING, "postal", "code", NULL);
+	getdata(&json, &lookup, &entry_data, "latitude", ENTRY_TYPE_DOUBLE, "location", "latitude", NULL);
+	getdata(&json, &lookup, &entry_data, "longitude", ENTRY_TYPE_DOUBLE, "location", "longitude", NULL);
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "time_zone", NULL);
 	if (entry_data.has_data) {
@@ -220,14 +192,8 @@ location(struct http_request *req)
 	/* GeoLite2 ASN lookup */
 	lookup = MMDB_lookup_string(&asn, ip, &gai_error, &mmdb_error);
 
-	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_number", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"asn\":%d", entry_data.uint32);
-
-	MMDB_get_value(&lookup.entry, &entry_data, "autonomous_system_organization", NULL);
-	if (entry_data.has_data)
-		kore_buf_appendf(&json, ",\"organization\":\"%.*s\"",
-		    entry_data.data_size, entry_data.utf8_string);
+	getdata(&json, &lookup, &entry_data, "asn", ENTRY_TYPE_UINT32, "autonomous_system_number", NULL);
+	getdata(&json, &lookup, &entry_data, "organization", ENTRY_TYPE_STRING, "autonomous_system_organization", NULL);
 
 	kore_buf_append(&json, is_callback ? "});\n" : "}\n", is_callback ? 4 : 2);
 	answer = kore_buf_stringify(&json, NULL);
