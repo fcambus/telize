@@ -59,7 +59,7 @@ void
 getdata(struct kore_buf *json, MMDB_lookup_result_s *lookup, MMDB_entry_data_s *entry_data, char *field, int type, ...)
 {
 	va_list keys;
-	va_start(keys, entry_data);
+	va_start(keys, type);
 
 	MMDB_vget_value(&lookup->entry, entry_data, keys);
 	if (entry_data->has_data) {
