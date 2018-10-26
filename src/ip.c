@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-12                                                  */
+/* Last Updated: 2018-10-26                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -15,8 +15,8 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#include <kore/http.h>
 #include <kore/kore.h>
+#include <kore/http.h>
 
 int	ip(struct http_request *);
 
