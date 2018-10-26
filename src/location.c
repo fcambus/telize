@@ -109,11 +109,11 @@ location(struct http_request *req)
 	http_response_header(req, "Content-Type", "application/json; charset=utf-8");
 
 	/* IP address of the client originating the request */
-	if (req->owner->addrtype == AF_INET)
-		inet_ntop(req->owner->addrtype,
+	if (req->owner->family == AF_INET)
+		inet_ntop(req->owner->family,
 		    &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
 	else
-		inet_ntop(req->owner->addrtype,
+		inet_ntop(req->owner->family,
 		    &(req->owner->addr.ipv6.sin6_addr), addr, INET6_ADDRSTRLEN);
 
 	/* IP address specified in the "X-Forwarded-For" header */

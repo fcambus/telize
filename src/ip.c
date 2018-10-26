@@ -28,10 +28,10 @@ ip(struct http_request *req)
 
 	addr = kore_malloc(INET6_ADDRSTRLEN);
 
-	if (req->owner->addrtype == AF_INET) {
-		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
+	if (req->owner->family == AF_INET) {
+		inet_ntop(req->owner->family, &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
 	} else {
-		inet_ntop(req->owner->addrtype, &(req->owner->addr.ipv6.sin6_addr), addr, INET6_ADDRSTRLEN);
+		inet_ntop(req->owner->family, &(req->owner->addr.ipv6.sin6_addr), addr, INET6_ADDRSTRLEN);
 	}
 
 	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
