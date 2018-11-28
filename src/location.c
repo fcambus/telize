@@ -5,7 +5,7 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-10-12                                                  */
+/* Last Updated: 2018-11-28                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
@@ -177,16 +177,23 @@ location(struct http_request *req)
 
 	MMDB_get_value(&lookup.entry, &entry_data, "location", "time_zone", NULL);
 	if (entry_data.has_data) {
-		char *timezone_value = strndup(entry_data.utf8_string, entry_data.data_size);
-		kore_buf_appendf(&json, ",\"timezone\":\"%s\"", timezone_value);
+		size_t tz_len = entry_data.data_size;
+		char *tz = strndup(entry_data.utf8_string, tz_len);
 
-		setenv("TZ", timezone_value, 1);
+		struct kore_buf *b;
+		b = kore_buf_alloc(tz_len);
+		kore_buf_append(b, tz, tz_len);
+		kore_buf_replace_string(b, "/", "\\/", 2);
+		kore_buf_appendf(&json, ",\"timezone\":\"%s\"", kore_buf_stringify(b, NULL));
+		kore_buf_free(b);
+
+		setenv("TZ", tz, 1);
 		tzset();
 		time(&rawtime);
 		info = localtime(&rawtime);
 		kore_buf_appendf(&json, ",\"offset\":%d", info->tm_gmtoff);
 
-		free(timezone_value);
+		free(tz);
 	}
 
 	/* GeoLite2 ASN lookup */
