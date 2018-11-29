@@ -44,15 +44,25 @@ Telize requires the free [GeoLite2 databases][3] from MaxMind.
 
 ## Building
 
+Using the kodev tool:
+
+	kodev build
+
 ## Configuration
+
+## Running
+
+Using the kodev tool:
+
+	kodev run
 
 ## Access and Error logs
 
 The default Telize configuration does not have logging enabled, it must be
 configured manually.
 
-If your Telize instance produces lots of logs, this might be of interest:
-[Log rotation directly within Nginx configuration file][4].
+If your Telize instance produces lots of logs, [Logswan][4] might be of
+interest.
 
 ## Telize and proxies
 
@@ -112,4 +122,4 @@ GitHub: https://github.com/fcambus/telize
 [1]: https://kore.io
 [2]: https://github.com/maxmind/libmaxminddb
 [3]: https://dev.maxmind.com/geoip/geoip2/geolite2/
-[4]: https://www.cambus.net/log-rotation-directly-within-nginx-configuration-file/
+[4]: https://www.logswan.org
