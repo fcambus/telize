@@ -94,7 +94,7 @@ telize_request_ip(struct http_request *req, char *buf, size_t len)
 	memcpy(buf, hdr_ip, hdr_len);
 	buf[hdr_len] = '\0';
 
-	if (inet_pton(AF_INET, buf, &req->owner->addr) == -1) {
+	if (inet_pton(AF_INET, buf, addr) == -1) {
 		if (inet_pton(AF_INET6, buf, &req->owner->addr) == -1) {
 			kore_log(LOG_ERR, "Malformed IP in X-Forwarded-For");
 			return (KORE_RESULT_ERROR);
