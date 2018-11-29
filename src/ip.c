@@ -12,39 +12,20 @@
 /*                                                                           */
 /*****************************************************************************/
 
-#include <string.h>
-#include <sys/socket.h>
-
-#include <kore/kore.h>
-#include <kore/http.h>
-
-int	ip(struct http_request *);
+#include "telize.h"
 
 int
-ip(struct http_request *req)
+request_ip(struct http_request *req)
 {
-	const char *visitor_ip, *ip;
-	char *addr;
+	char		ip[INET6_ADDRSTRLEN];
 
-	addr = kore_malloc(INET6_ADDRSTRLEN);
-
-	if (req->owner->family == AF_INET) {
-		inet_ntop(req->owner->family, &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
-	} else {
-		inet_ntop(req->owner->family, &(req->owner->addr.ipv6.sin6_addr), addr, INET6_ADDRSTRLEN);
-	}
-
-	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
-		strtok(visitor_ip, ",");
-		ip = visitor_ip;
-	} else {
-		ip = addr;
+	if (!telize_request_ip(req, ip, sizeof(ip))) {
+		http_response(req, HTTP_STATUS_INTERNAL_ERROR, NULL, 0);
+		return (KORE_RESULT_OK);
 	}
 
 	http_response_header(req, "content-type", "text/plain");
-	http_response(req, 200, ip, strlen(ip));
-
-	kore_free(addr);
+	http_response(req, HTTP_STATUS_OK, ip, strlen(ip));
 
 	return (KORE_RESULT_OK);
 }

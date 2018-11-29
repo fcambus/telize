@@ -12,60 +12,40 @@
 /*                                                                           */
 /*****************************************************************************/
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <sys/socket.h>
-
-#include <kore/kore.h>
-#include <kore/http.h>
-
-int	jsonip(struct http_request *);
+#include "telize.h"
 
 int
-jsonip(struct http_request *req)
+request_json_ip(struct http_request *req)
 {
-	const char *visitor_ip, *ip;
-	char *answer, *callback, *addr;
-	bool is_callback = false;
+	struct kore_buf		json;
+	char			*answer, *callback;
+	char			ip[INET6_ADDRSTRLEN];
+
+	if (!telize_request_ip(req, ip, sizeof(ip))) {
+		http_response(req, HTTP_STATUS_INTERNAL_ERROR, NULL, 0);
+		return (KORE_RESULT_OK);
+	}
+
+	callback = NULL;
 
 	http_populate_get(req);
-
-	struct kore_buf json;
 	kore_buf_init(&json, 4096);
-
-	addr = kore_malloc(INET6_ADDRSTRLEN);
 
 	http_response_header(req, "Access-Control-Allow-Origin", "*");
 	http_response_header(req, "Cache-Control", "no-cache");
-	http_response_header(req, "Content-Type", "application/json; charset=utf-8");
+	http_response_header(req, "Content-Type",
+	    "application/json; charset=utf-8");
 
-	if (req->owner->family == AF_INET) {
-		inet_ntop(req->owner->family, &(req->owner->addr.ipv4.sin_addr), addr, INET6_ADDRSTRLEN);
-	} else {
-		inet_ntop(req->owner->family, &(req->owner->addr.ipv6.sin6_addr), addr, INET6_ADDRSTRLEN);
-	}
-
-	if (http_request_header(req, "X-Forwarded-For", &visitor_ip)) {
-		strtok(visitor_ip, ",");
-		ip = visitor_ip;
-	} else {
-		ip = addr;
-	}
-
-	if (http_argument_get_string(req, "callback", &callback)) {
+	if (http_argument_get_string(req, "callback", &callback))
 		kore_buf_appendf(&json, "%s(", callback);
-		is_callback = true;
-	}
 
 	kore_buf_appendf(&json, "{\"ip\":\"%s\"", ip);
+	kore_buf_append(&json, callback != NULL ? "});\n" : "}\n",
+	    callback != NULL ? 4 : 2);
 
-	kore_buf_append(&json, is_callback ? "});\n" : "}\n", is_callback ? 4 : 2);
 	answer = kore_buf_stringify(&json, NULL);
-
-	http_response(req, 200, answer, strlen(answer));
-
-	kore_buf_free(&json);
-	kore_free(addr);
+	http_response(req, HTTP_STATUS_OK, answer, strlen(answer));
+	kore_buf_cleanup(&json);
 
 	return (KORE_RESULT_OK);
 }
