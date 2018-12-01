@@ -30,9 +30,9 @@ request_location(struct http_request *req)
 	struct kore_buf		*json, buf;
 	MMDB_entry_data_s	entry_data;
 	size_t			tz_len, len;
-	char			ip[INET6_ADDRSTRLEN];
 	char			*ptr, *callback, *tz;
-	int			gai_error, mmdb_error;
+	int			slen, gai_error, mmdb_error;
+	char			ip[INET6_ADDRSTRLEN], tzenv[256];
 
 	if (!telize_request_ip(req, ip, sizeof(ip))) {
 		http_response(req, HTTP_STATUS_INTERNAL_ERROR, NULL, 0);
@@ -137,7 +137,14 @@ request_location(struct http_request *req)
 		    kore_buf_stringify(&buf, NULL));
 		kore_buf_cleanup(&buf);
 
-		setenv("TZ", tz, 1);
+		slen = snprintf(tzenv, sizeof(tzenv), "TZ=%s", tz);
+		if (slen == -1 || (size_t)slen >= sizeof(tzenv)) {
+			kore_buf_free(json);
+			http_response(req, HTTP_STATUS_INTERNAL_ERROR, NULL, 0);
+			return (KORE_RESULT_OK);
+		}
+
+		putenv(tzenv);
 		tzset();
 		time(&rawtime);
 		info = localtime(&rawtime);
