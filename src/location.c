@@ -5,12 +5,14 @@
 /* https://www.telize.com                                                    */
 /*                                                                           */
 /* Created:      2013-08-15                                                  */
-/* Last Updated: 2018-12-02                                                  */
+/* Last Updated: 2018-12-07                                                  */
 /*                                                                           */
 /* Telize is released under the BSD 2-Clause license.                        */
 /* See LICENSE file for details.                                             */
 /*                                                                           */
 /*****************************************************************************/
+
+#define _XOPEN_SOURCE 700
 
 #include <time.h>
 
