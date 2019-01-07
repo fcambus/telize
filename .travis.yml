@@ -9,7 +9,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libmaxminddb-dev libssl-dev
   - git clone https://git.kore.io/kore.git
-  - cd kore && make
+  - cd kore && make NOTLS=1
   - sudo make install
   - cd -
 
