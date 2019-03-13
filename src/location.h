@@ -1,16 +1,14 @@
-/*****************************************************************************/
-/*                                                                           */
-/* Telize 2.0.0                                                              */
-/* Copyright (c) 2013-2019, Frederic Cambus                                  */
-/* https://www.telize.com                                                    */
-/*                                                                           */
-/* Created:      2013-08-15                                                  */
-/* Last Updated: 2019-03-13                                                  */
-/*                                                                           */
-/* Telize is released under the BSD 2-Clause license.                        */
-/* See LICENSE file for details.                                             */
-/*                                                                           */
-/*****************************************************************************/
+/*
+ * Telize 2.0.0
+ * Copyright (c) 2013-2019, Frederic Cambus
+ * https://www.telize.com
+ *
+ * Created:      2013-08-15
+ * Last Updated: 2019-03-13
+ *
+ * Telize is released under the BSD 2-Clause license.
+ * See LICENSE file for details.
+ */
 
 #define COUNTRIES 251
 
