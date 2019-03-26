@@ -18,6 +18,7 @@ script: kodev build
 
 env:
   global:
+    # travis encrypt -r fcambus/telize encrypt COVERITY_SCAN_TOKEN=token
     - secure: "DYiX2BTl9/Cb2HexzubmBtLw6vyQKn15MI40AU5/5cSJie57TXnxdcalmiodUnikLYdbDiqmbVTKChsyj4IssEMxZxeVoiNdjb2ILVcZSixV7VVQr1fHp+oyAgHI5CsQS9BqyU4chJdM65kTQvg9cGCG1BfuCR4GGVtbGUnAH2o="
 
 addons:
