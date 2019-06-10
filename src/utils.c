@@ -18,9 +18,10 @@ MMDB_s telize_city;
 int
 telize_init(int state)
 {
-	if (state != KORE_MODULE_LOAD) {
-		kore_log(LOG_NOTICE, "denying reload of module, not fixed");
-		return (KORE_RESULT_ERROR);
+	if (state == KORE_MODULE_UNLOAD) {
+		MMDB_close(&telize_city);
+		MMDB_close(&telize_asn);
+		return (KORE_RESULT_OK);
 	}
 
 	if (MMDB_open("/var/db/GeoIP/GeoLite2-City.mmdb",
