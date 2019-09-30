@@ -15,7 +15,7 @@ before_install:
   - sudo make install
   - cd -
 
-script: kodev build
+script: kodev clean && kodev build
 
 env:
   global:
