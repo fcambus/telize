@@ -41,4 +41,4 @@ addons:
       description: "High performance JSON IP and GeoIP REST API (IP Geolocation)"
     notification_email: fred@statdns.com
     build_command: kodev build
-    branch_pattern: master
+    branch_pattern: coverity_scan
