@@ -12,6 +12,8 @@
 
 #include "telize.h"
 
+#define GEOIP2DIR "/var/db/GeoIP/"
+
 MMDB_s telize_asn;
 MMDB_s telize_city;
 
@@ -24,11 +26,11 @@ telize_init(int state)
 		return (KORE_RESULT_OK);
 	}
 
-	if (MMDB_open("/var/db/GeoIP/GeoLite2-City.mmdb",
+	if (MMDB_open(GEOIP2DIR "GeoLite2-City.mmdb",
 	    MMDB_MODE_MMAP, &telize_city) != MMDB_SUCCESS)
 		fatalx("can't open GeoLite2 City database: %s", errno_s);
 
-	if (MMDB_open("/var/db/GeoIP/GeoLite2-ASN.mmdb",
+	if (MMDB_open(GEOIP2DIR "GeoLite2-ASN.mmdb",
 	    MMDB_MODE_MMAP, &telize_asn) != MMDB_SUCCESS)
 		fatalx("can't open GeoLite2 ASN database: %s", errno_s);
 
