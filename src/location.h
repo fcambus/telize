@@ -4,11 +4,14 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2019-03-13
+ * Last Updated: 2020-03-25
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
  */
+
+#ifndef LOCATION_H
+#define LOCATION_H
 
 #define COUNTRIES 251
 
@@ -64,3 +67,5 @@ char *country_code3_array[] = {
 	"VIR", "VNM", "VUT", "WLF", "WSM", "XKX", "YEM", "MYT", "ZAF", "ZMB",
 	"ZWE"
 };
+
+#endif /* LOCATION_H */
