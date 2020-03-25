@@ -4,14 +4,14 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2019-03-13
+ * Last Updated: 2020-03-25
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
  */
 
-#ifndef __H_TELIZE_H
-#define __H_TELIZE_H
+#ifndef TELIZE_H
+#define TELIZE_H
 
 #include <kore/kore.h>
 #include <kore/http.h>
@@ -36,4 +36,4 @@ int	location(struct http_request *);
 extern MMDB_s telize_asn;
 extern MMDB_s telize_city;
 
-#endif
+#endif /* TELIZE_H */
