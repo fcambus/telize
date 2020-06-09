@@ -4,14 +4,11 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2019-03-13
+ * Last Updated: 2020-06-09
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
  */
-
-#define _XOPEN_SOURCE 700
-#define _GNU_SOURCE
 
 #include <time.h>
 
