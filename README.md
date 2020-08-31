@@ -28,7 +28,7 @@ be blazing fast.
 
 ### Dependencies
 
-Telize requires [Kore][1] 3.2.0+ and [libmaxminddb][2].
+Telize requires [Kore][1] 4.0.0+ and [libmaxminddb][2].
 
 ### GeoIP2 databases
 
