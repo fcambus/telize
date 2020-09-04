@@ -51,10 +51,9 @@ Using the kodev tool:
 
 	kodev run
 
-## Access and Error logs
+## Access logs
 
-The default Telize configuration does not have logging enabled, it must be
-configured manually.
+The default Telize configuration has logging enabled.
 
 If your Telize instance produces lots of logs, [Logswan][4] might be of
 interest.
