@@ -34,8 +34,9 @@ Telize requires [Kore][1] 4.0.0+ and [libmaxminddb][2].
 
 Telize requires the free [GeoLite2 databases][3] from MaxMind.
 
-The `GeoLite2 City` and `GeoLite2 ASN` databases files should be placed
-in `/var/db/GeoIP`.
+The path to the `GeoLite2 City` and `GeoLite2 ASN` databases can be configured
+in `conf/build.conf` via the `GEOIP2DIR` macro, pointing to `/var/db/GeoIP`
+by default.
 
 ## Building
 
