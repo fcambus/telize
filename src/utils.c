@@ -12,8 +12,6 @@
 
 #include "telize.h"
 
-#define GEOIP2DIR "/var/db/GeoIP/"
-
 MMDB_s telize_asn;
 MMDB_s telize_city;
 
