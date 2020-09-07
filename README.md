@@ -53,7 +53,9 @@ Using the kodev tool:
 
 ## Access logs
 
-The default Telize configuration has logging enabled.
+The default Telize configuration does not have logging enabled, it must be
+configured manually. There are commented out `accesslog` directives in
+`conf/telize.conf` for each domain block.
 
 If your Telize instance produces lots of logs, [Logswan][4] might be of
 interest.
