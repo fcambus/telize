@@ -45,6 +45,10 @@ Using the kodev tool:
 
 ## Configuration
 
+By default, Telize will only listen on `127.0.0.1` and `::1`. To add more
+listeners, `bind` directives should be added in `conf/telize.conf` in the
+server blocks.
+
 ## Running
 
 Using the kodev tool:
@@ -61,6 +65,9 @@ If your Telize instance produces lots of logs, [Logswan][4] might be of
 interest.
 
 ## Telize and proxies
+
+Telize handles the 'X-Forwarded-For' HTTP header if present, and returns
+data for the first IP address of the list.
 
 ## CORS Support (Cross-origin resource sharing)
 
