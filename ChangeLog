@@ -1,3 +1,13 @@
+Telize 3.0.0 (2020-09-07)
+
+- Telize has been rewritten in C using the Kore Web platform
+- Add a few entries in the 'country_code' to 'country_code3' map
+- Handle the 'X-Forwarded-For' HTTP header if present
+- When 'X-Forwarded-For' header is set, get the first IP of the list
+- Dynamically calculate timezone offsets and add data to the payload
+
+
+
 Telize 2.0.0 (2018-03-15)
 
 - Switch to using GeoIP2/GeoLite2 databases
