@@ -76,6 +76,14 @@ Telize has CORS enabled by default with the following policy:
 
 	Access-Control-Allow-Origin: *
 
+## Timezone offsets
+
+Since version 3.0.0, Telize now dynamically calculates timezone offsets
+(UTC time offset) and adds data to the payload.
+
+On Alpine Linux, the 'tzdata' package needs to be installed, otherwise
+localtime() will not return any data.
+
 ## Usage
 
 For complete API documentation and usage examples, please check the
