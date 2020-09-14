@@ -83,26 +83,26 @@ project site.
 
 ### Get IP address in Plain text format
 
-- Example: http://127.0.0.1/ip
+- Example: http://127.0.0.1:8080/ip
 
 ### Get IP address in JSON format
 
-- Example (JSON): http://127.0.0.1/jsonip
-- Example (JSONP): http://127.0.0.1/jsonip?callback=getip
+- Example (JSON): http://127.0.0.1:8080/jsonip
+- Example (JSONP): http://127.0.0.1:8080/jsonip?callback=getip
 
 ### Get IP address location in JSON format
 
 Calling the API endpoint without any parameter will return the visitor
 IP address:
 
-- Example (JSON): http://127.0.0.1/location
-- Example (JSONP): http://127.0.0.1/location?callback=getgeoip
+- Example (JSON): http://127.0.0.1:8080/location
+- Example (JSONP): http://127.0.0.1:8080/location?callback=getgeoip
 
 Appending an IP address as parameter will return location information for
 the given address:
 
-- Example (JSON): http://127.0.0.1/location/46.19.37.108
-- Example (JSONP): http://127.0.0.1/location/46.19.37.108?callback=getgeoip
+- Example (JSON): http://127.0.0.1:8080/location/46.19.37.108
+- Example (JSONP): http://127.0.0.1:8080/location/46.19.37.108?callback=getgeoip
 
 ## License
 
