@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2020-06-09
+ * Last Updated: 2020-10-21
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -129,6 +129,11 @@ request_location(struct http_request *req)
 	if (entry_data.has_data) {
 		tz_len = entry_data.data_size;
 		tz = strndup(entry_data.utf8_string, tz_len);
+		if (!tz) {
+			kore_buf_free(json);
+			http_response(req, HTTP_STATUS_INTERNAL_ERROR, NULL, 0);
+			return (KORE_RESULT_OK);
+		}
 
 		kore_buf_init(&buf, tz_len);
 		kore_buf_append(&buf, tz, tz_len);
