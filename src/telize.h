@@ -1,6 +1,6 @@
 /*
  * Telize 3.0.0
- * Copyright (c) 2013-2020, Frederic Cambus
+ * Copyright (c) 2013-2021, Frederic Cambus
  * https://www.telize.com
  *
  * Created:      2013-08-15
