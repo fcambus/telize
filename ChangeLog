@@ -1,3 +1,15 @@
+Telize 3.0.1 (2021-01-01)
+
+- Add port number for endpoints examples, so they work with default settings
+- Add a 'Timezone offsets' section in the README
+- Remove entry for "Netherlands Antilles" in 'country_code' and 'country_code3'
+  arrays
+- Add -Wextra and -pedantic to CFLAGS
+- Enable FORTIFY_SOURCE level 2
+- Check strndup() return value and error out if allocation fails
+
+
+
 Telize 3.0.0 (2020-09-07)
 
 - Telize has been rewritten in C using the Kore Web platform
