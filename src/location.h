@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2020-09-17
+ * Last Updated: 2021-02-14
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -13,7 +13,7 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
-#define COUNTRIES 251
+#define COUNTRIES 250
 
 char *country_code_array[] = {
 	"AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT",
