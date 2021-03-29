@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2020-10-21
+ * Last Updated: 2021-03-29
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -104,6 +104,9 @@ request_location(struct http_request *req)
 			}
 		}
 	}
+
+	telize_getdata(json, &lookup, &entry_data, "is_in_european_union",
+	    ENTRY_TYPE_BOOLEAN, "country", "is_in_european_union", NULL);
 
 	telize_getdata(json, &lookup, &entry_data, "region",
 	    ENTRY_TYPE_STRING, "subdivisions", "0", "names", "en", NULL);
