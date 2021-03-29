@@ -37,7 +37,7 @@ addons:
   coverity_scan:
     project:
       name: "fcambus/telize"
-      version: 3.0.1
+      version: 3.1.0
       description: "High performance JSON IP and GeoIP REST API (IP Geolocation)"
     notification_email: fred@statdns.com
     build_command: kodev build
