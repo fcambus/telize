@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2019-03-13
+ * Last Updated: 2021-03-29
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -58,6 +58,10 @@ telize_getdata(struct kore_buf *json, MMDB_lookup_result_s *lookup,
 		case ENTRY_TYPE_DOUBLE:
 			kore_buf_appendf(json, ",\"%s\":%.4f",
 			    field, entry_data->double_value);
+			break;
+		case ENTRY_TYPE_BOOLEAN:
+			kore_buf_appendf(json, ",\"%s\":%s",
+			    field, entry_data->boolean ? "true" : "false");
 			break;
 		}
 	}

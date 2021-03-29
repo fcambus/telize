@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2020-03-25
+ * Last Updated: 2021-03-29
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -21,6 +21,7 @@
 #define ENTRY_TYPE_UINT32	0
 #define ENTRY_TYPE_STRING	1
 #define ENTRY_TYPE_DOUBLE	2
+#define ENTRY_TYPE_BOOLEAN	3
 
 int	request_ip(struct http_request *);
 int	request_json_ip(struct http_request *);
