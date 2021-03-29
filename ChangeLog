@@ -1,3 +1,11 @@
+Telize 3.1.0 (2021-03-29)
+
+- Decrement COUNTRIES to account for "Netherlands Antilles" removal
+- Allow telize_getdata() to handle boolean values from MMDB databases
+- Add the 'is_in_european_union' field if it's present in the MMDB database
+
+
+
 Telize 3.0.1 (2021-01-01)
 
 - Add port number for endpoints examples, so they work with default settings
