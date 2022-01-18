@@ -29,16 +29,55 @@ import (
 )
 
 var asn *maxminddb.Reader
+var city *maxminddb.Reader
 
 type ASN struct {
 	AutonomousSystemNumber       uint   `maxminddb:"autonomous_system_number"`
 	AutonomousSystemOrganization string `maxminddb:"autonomous_system_organization"`
 }
 
+type City struct {
+	Continent struct {
+		Code  string            `maxminddb:"code"`
+		Names map[string]string `maxminddb:"names"`
+	} `maxminddb:"continent"`
+	Country struct {
+		IsInEuropeanUnion bool              `maxminddb:"is_in_european_union"`
+		IsoCode           string            `maxminddb:"iso_code"`
+		Names             map[string]string `maxminddb:"names"`
+	} `maxminddb:"country"`
+	Subdivisions []struct {
+		IsoCode string            `maxminddb:"iso_code"`
+		Names   map[string]string `maxminddb:"names"`
+	} `maxminddb:"subdivisions"`
+	City struct {
+		Names map[string]string `maxminddb:"names"`
+	} `maxminddb:"city"`
+	Postal struct {
+		Code string `maxminddb:"code"`
+	} `maxminddb:"postal"`
+	Location struct {
+		Latitude  float64 `maxminddb:"latitude"`
+		Longitude float64 `maxminddb:"longitude"`
+		TimeZone  string  `maxminddb:"time_zone"`
+	} `maxminddb:"location"`
+}
+
 type payload struct {
-	IP           string `json:"ip"`
-	ASN          uint   `json:"asn,omitempty"`
-	Organization string `json:"organization,omitempty"`
+	IP                string  `json:"ip"`
+	Continent         string  `json:"continent_code"`
+	Country           string  `json:"country"`
+	CountryCode       string  `json:"country_code"`
+	IsInEuropeanUnion bool    `json:"is_in_european_union"`
+	Region            string  `json:"region"`
+	RegionCode        string  `json:"region_code"`
+	City              string  `json:"city"`
+	PostalCode        string  `json:"postal_code"`
+	Latitude          float64 `json:"latitude"`
+	Longitude         float64 `json:"longitude"`
+	TimeZone          string  `json:"timezone"`
+	ASN               uint    `json:"asn,omitempty"`
+	Organization      string  `json:"organization,omitempty"`
 }
 
 func ip(w http.ResponseWriter, r *http.Request) {
@@ -76,10 +115,28 @@ func location(w http.ResponseWriter, r *http.Request) {
 		log.Panic(err)
 	}
 
+	var record City
+
+	err = city.Lookup(ip_, &record)
+	if err != nil {
+		log.Panic(err)
+	}
+
 	jsonip := payload{
-		IP:           ip,
-		ASN:          asn_record.AutonomousSystemNumber,
-		Organization: asn_record.AutonomousSystemOrganization,
+		IP:                ip,
+		Continent:         record.Continent.Code,
+		Country:           record.Country.Names["en"],
+		CountryCode:       record.Country.IsoCode,
+		IsInEuropeanUnion: record.Country.IsInEuropeanUnion,
+		Region:            record.Subdivisions[0].Names["en"],
+		RegionCode:        record.Subdivisions[0].IsoCode,
+		City:              record.City.Names["en"],
+		PostalCode:        record.Postal.Code,
+		Latitude:          record.Location.Latitude,
+		Longitude:         record.Location.Longitude,
+		TimeZone:          record.Location.TimeZone,
+		ASN:               asn_record.AutonomousSystemNumber,
+		Organization:      asn_record.AutonomousSystemOrganization,
 	}
 
 	if json, err := json.Marshal(jsonip); err == nil {
@@ -121,6 +178,12 @@ func main() {
 		log.Fatal(err)
 	}
 	defer asn.Close()
+
+	city, err = maxminddb.Open("GeoLite2-City.mmdb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer city.Close()
 
 	address := *host + ":" + *port
 
