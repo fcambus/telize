@@ -68,6 +68,7 @@ type payload struct {
 	Continent         string  `json:"continent_code"`
 	Country           string  `json:"country"`
 	CountryCode       string  `json:"country_code"`
+	CountryCode3      string  `json:"country_code3"`
 	IsInEuropeanUnion bool    `json:"is_in_european_union"`
 	Region            string  `json:"region"`
 	RegionCode        string  `json:"region_code"`
@@ -127,6 +128,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 		Continent:         record.Continent.Code,
 		Country:           record.Country.Names["en"],
 		CountryCode:       record.Country.IsoCode,
+		CountryCode3:      CountryCode3[record.Country.IsoCode],
 		IsInEuropeanUnion: record.Country.IsInEuropeanUnion,
 		Region:            record.Subdivisions[0].Names["en"],
 		RegionCode:        record.Subdivisions[0].IsoCode,
