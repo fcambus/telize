@@ -135,8 +135,6 @@ func location(w http.ResponseWriter, r *http.Request) {
 		CountryCode:       record.Country.IsoCode,
 		CountryCode3:      CountryCode3[record.Country.IsoCode],
 		IsInEuropeanUnion: record.Country.IsInEuropeanUnion,
-		Region:            record.Subdivisions[0].Names["en"],
-		RegionCode:        record.Subdivisions[0].IsoCode,
 		City:              record.City.Names["en"],
 		PostalCode:        record.Postal.Code,
 		Latitude:          record.Location.Latitude,
@@ -145,6 +143,11 @@ func location(w http.ResponseWriter, r *http.Request) {
 		Offset:            offset,
 		ASN:               asn_record.AutonomousSystemNumber,
 		Organization:      asn_record.AutonomousSystemOrganization,
+	}
+
+	if record.Subdivisions != nil {
+		jsonip.Region = record.Subdivisions[0].Names["en"]
+		jsonip.RegionCode = record.Subdivisions[0].IsoCode
 	}
 
 	if json, err := json.Marshal(jsonip); err == nil {
