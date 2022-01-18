@@ -19,15 +19,26 @@ import (
 	"flag"
 	"fmt"
 	"github.com/go-chi/chi/v5"
+	"github.com/oschwald/maxminddb-golang"
 	"io"
+	"log"
 	"net"
 	"net/http"
 	"net/http/fcgi"
 	"os"
 )
 
+var asn *maxminddb.Reader
+
+type ASN struct {
+	AutonomousSystemNumber       uint   `maxminddb:"autonomous_system_number"`
+	AutonomousSystemOrganization string `maxminddb:"autonomous_system_organization"`
+}
+
 type payload struct {
-	IP string `json:"ip"`
+	IP           string `json:"ip"`
+	ASN          uint   `json:"asn,omitempty"`
+	Organization string `json:"organization,omitempty"`
 }
 
 func ip(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +62,38 @@ func jsonip(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func location(w http.ResponseWriter, r *http.Request) {
+	callback := r.URL.Query().Get("callback")
+
+	ip := chi.URLParam(r, "ip")
+
+	ip_ := net.ParseIP(ip)
+
+	var asn_record ASN
+
+	err := asn.Lookup(ip_, &asn_record)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	jsonip := payload{
+		IP:           ip,
+		ASN:          asn_record.AutonomousSystemNumber,
+		Organization: asn_record.AutonomousSystemOrganization,
+	}
+
+	if json, err := json.Marshal(jsonip); err == nil {
+		if callback != "" {
+			io.WriteString(w, callback+"("+string(json)+");")
+		} else {
+			io.WriteString(w, string(json))
+		}
+	}
+}
+
 func main() {
+	var err error
+
 	fastcgi := flag.Bool("fastcgi", false, "Enable FastCGI mode")
 	host := flag.String("host", "127.0.0.1", "Set the server host")
 	port := flag.String("port", "8080", "Set the server port")
@@ -74,6 +116,12 @@ func main() {
 		mode = "FastCGI"
 	}
 
+	asn, err = maxminddb.Open("GeoLite2-ASN.mmdb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer asn.Close()
+
 	address := *host + ":" + *port
 
 	fmt.Println("Listening on ("+mode+" mode):", address)
@@ -81,6 +129,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Get("/ip", ip)
 	r.Get("/jsonip", jsonip)
+	r.Get("/location/{ip}", location)
 
 	if *fastcgi {
 		listener, _ := net.Listen("tcp", address)
