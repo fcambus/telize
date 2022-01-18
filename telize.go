@@ -26,6 +26,7 @@ import (
 	"net/http"
 	"net/http/fcgi"
 	"os"
+	"time"
 )
 
 var asn *maxminddb.Reader
@@ -77,6 +78,7 @@ type payload struct {
 	Latitude          float64 `json:"latitude"`
 	Longitude         float64 `json:"longitude"`
 	TimeZone          string  `json:"timezone"`
+	Offset            int     `json:"offset"`
 	ASN               uint    `json:"asn,omitempty"`
 	Organization      string  `json:"organization,omitempty"`
 }
@@ -123,6 +125,9 @@ func location(w http.ResponseWriter, r *http.Request) {
 		log.Panic(err)
 	}
 
+	tz, _ := time.LoadLocation(record.Location.TimeZone)
+	_, offset := time.Now().In(tz).Zone()
+
 	jsonip := payload{
 		IP:                ip,
 		Continent:         record.Continent.Code,
@@ -137,6 +142,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 		Latitude:          record.Location.Latitude,
 		Longitude:         record.Location.Longitude,
 		TimeZone:          record.Location.TimeZone,
+		Offset:            offset,
 		ASN:               asn_record.AutonomousSystemNumber,
 		Organization:      asn_record.AutonomousSystemOrganization,
 	}
