@@ -66,19 +66,19 @@ type City struct {
 
 type payload struct {
 	IP                string  `json:"ip"`
-	Continent         string  `json:"continent_code"`
-	Country           string  `json:"country"`
-	CountryCode       string  `json:"country_code"`
-	CountryCode3      string  `json:"country_code3"`
-	IsInEuropeanUnion bool    `json:"is_in_european_union"`
-	Region            string  `json:"region"`
-	RegionCode        string  `json:"region_code"`
-	City              string  `json:"city"`
-	PostalCode        string  `json:"postal_code"`
-	Latitude          float64 `json:"latitude"`
-	Longitude         float64 `json:"longitude"`
-	TimeZone          string  `json:"timezone"`
-	Offset            int     `json:"offset"`
+	Continent         string  `json:"continent_code,omitempty""`
+	Country           string  `json:"country,omitempty""`
+	CountryCode       string  `json:"country_code,omitempty""`
+	CountryCode3      string  `json:"country_code3,omitempty""`
+	IsInEuropeanUnion bool    `json:"is_in_european_union,omitempty""`
+	Region            string  `json:"region,omitempty""`
+	RegionCode        string  `json:"region_code,omitempty""`
+	City              string  `json:"city,omitempty""`
+	PostalCode        string  `json:"postal_code,omitempty""`
+	Latitude          float64 `json:"latitude,omitempty"`
+	Longitude         float64 `json:"longitude,omitempty"`
+	TimeZone          string  `json:"timezone,omitempty"`
+	Offset            int     `json:"offset,omitempty"`
 	ASN               uint    `json:"asn,omitempty"`
 	Organization      string  `json:"organization,omitempty"`
 }
