@@ -15,6 +15,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/go-chi/chi/v5"
@@ -25,10 +26,29 @@ import (
 	"os"
 )
 
+type payload struct {
+	IP string `json:"ip"`
+}
+
 func ip(w http.ResponseWriter, r *http.Request) {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
 	io.WriteString(w, ip)
+}
+
+func jsonip(w http.ResponseWriter, r *http.Request) {
+	callback := r.URL.Query().Get("callback")
+
+	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	jsonip := payload{IP: ip}
+
+	if json, err := json.Marshal(jsonip); err == nil {
+		if callback != "" {
+			io.WriteString(w, callback+"("+string(json)+");")
+		} else {
+			io.WriteString(w, string(json))
+		}
+	}
 }
 
 func main() {
@@ -60,6 +80,7 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Get("/ip", ip)
+	r.Get("/jsonip", jsonip)
 
 	if *fastcgi {
 		listener, _ := net.Listen("tcp", address)
