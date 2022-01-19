@@ -89,6 +89,19 @@ func ip(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, ip)
 }
 
+// Generate JSON output
+func jsonify(w http.ResponseWriter, r *http.Request, payload *payload) {
+	callback := r.URL.Query().Get("callback")
+
+	if json, err := json.Marshal(payload); err == nil {
+		if callback != "" {
+			io.WriteString(w, callback+"("+string(json)+");")
+		} else {
+			io.WriteString(w, string(json))
+		}
+	}
+}
+
 func jsonip(w http.ResponseWriter, r *http.Request) {
 	callback := r.URL.Query().Get("callback")
 
