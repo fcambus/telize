@@ -93,6 +93,9 @@ func ip(w http.ResponseWriter, r *http.Request) {
 func jsonify(w http.ResponseWriter, r *http.Request, payload *payload) {
 	callback := r.URL.Query().Get("callback")
 
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	if json, err := json.Marshal(payload); err == nil {
 		if callback != "" {
 			io.WriteString(w, callback+"("+string(json)+");")
