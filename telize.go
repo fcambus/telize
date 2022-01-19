@@ -103,23 +103,13 @@ func jsonify(w http.ResponseWriter, r *http.Request, payload *payload) {
 }
 
 func jsonip(w http.ResponseWriter, r *http.Request) {
-	callback := r.URL.Query().Get("callback")
-
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 	jsonip := payload{IP: ip}
 
-	if json, err := json.Marshal(jsonip); err == nil {
-		if callback != "" {
-			io.WriteString(w, callback+"("+string(json)+");")
-		} else {
-			io.WriteString(w, string(json))
-		}
-	}
+	jsonify(w, r, &jsonip)
 }
 
 func location(w http.ResponseWriter, r *http.Request) {
-	callback := r.URL.Query().Get("callback")
-
 	ip := chi.URLParam(r, "ip")
 
 	ip_ := net.ParseIP(ip)
@@ -163,13 +153,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 		jsonip.RegionCode = record.Subdivisions[0].IsoCode
 	}
 
-	if json, err := json.Marshal(jsonip); err == nil {
-		if callback != "" {
-			io.WriteString(w, callback+"("+string(json)+");")
-		} else {
-			io.WriteString(w, string(json))
-		}
-	}
+	jsonify(w, r, &jsonip)
 }
 
 func main() {
