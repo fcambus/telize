@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2021-03-29
+ * Last Updated: 2022-04-20
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -50,7 +50,7 @@ request_location(struct http_request *req)
 	    "application/json; charset=utf-8");
 
 	/* Specific IP passed in the URL */
-	if (req->hdlr->type == HANDLER_TYPE_DYNAMIC) {
+	if (req->rt->type == HANDLER_TYPE_DYNAMIC) {
 		if ((ptr = strrchr(req->path, '/')) != NULL) {
 			ptr++;
 			len = strlen(ptr);
