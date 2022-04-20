@@ -198,8 +198,6 @@ func main() {
 
 	address := *host + ":" + *port
 
-	fmt.Println("Listening on ("+mode+" mode):", address)
-
 	r := chi.NewRouter()
 	r.Get("/ip", ip)
 	r.Get("/jsonip", jsonip)
@@ -218,4 +216,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
+
+	fmt.Println("Listening on ("+mode+" mode):", address)
 }
