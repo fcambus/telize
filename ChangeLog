@@ -1,3 +1,11 @@
+Telize 3.1.1 (2022-04-27)
+
+- Define GEOIP2DB_CITY and GEOIP2DB_ASN macros to load MMDB databases
+- Account for Kore 4.2 changes in http_request structure
+- Account for Kore 4.2 changes in the routing configuration
+
+
+
 Telize 3.1.0 (2021-03-29)
 
 - Decrement COUNTRIES to account for "Netherlands Antilles" removal
