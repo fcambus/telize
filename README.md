@@ -38,6 +38,9 @@ The path to the `GeoLite2 City` and `GeoLite2 ASN` databases can be configured
 in `conf/build.conf` via the `GEOIP2DIR` macro, pointing to `/var/db/GeoIP`
 by default.
 
+Databases names can be specified using the `GEOIP2DB_CITY` and `GEOIP2DB_ASN`
+macros.
+
 ## Building
 
 Using the kodev tool:
