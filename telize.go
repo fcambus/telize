@@ -80,6 +80,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 		log.Panic(err)
 	}
 
+	// XXX: Error handling when TimeZone is empty
 	tz, _ := time.LoadLocation(record.Location.TimeZone)
 	_, offset := time.Now().In(tz).Zone()
 
