@@ -32,57 +32,6 @@ import (
 var asn *maxminddb.Reader
 var city *maxminddb.Reader
 
-type ASN struct {
-	AutonomousSystemNumber       uint   `maxminddb:"autonomous_system_number"`
-	AutonomousSystemOrganization string `maxminddb:"autonomous_system_organization"`
-}
-
-type City struct {
-	Continent struct {
-		Code  string            `maxminddb:"code"`
-		Names map[string]string `maxminddb:"names"`
-	} `maxminddb:"continent"`
-	Country struct {
-		IsInEuropeanUnion bool              `maxminddb:"is_in_european_union"`
-		IsoCode           string            `maxminddb:"iso_code"`
-		Names             map[string]string `maxminddb:"names"`
-	} `maxminddb:"country"`
-	Subdivisions []struct {
-		IsoCode string            `maxminddb:"iso_code"`
-		Names   map[string]string `maxminddb:"names"`
-	} `maxminddb:"subdivisions"`
-	City struct {
-		Names map[string]string `maxminddb:"names"`
-	} `maxminddb:"city"`
-	Postal struct {
-		Code string `maxminddb:"code"`
-	} `maxminddb:"postal"`
-	Location struct {
-		Latitude  float64 `maxminddb:"latitude"`
-		Longitude float64 `maxminddb:"longitude"`
-		TimeZone  string  `maxminddb:"time_zone"`
-	} `maxminddb:"location"`
-}
-
-type payload struct {
-	IP                string  `json:"ip"`
-	Continent         string  `json:"continent_code,omitempty""`
-	Country           string  `json:"country,omitempty""`
-	CountryCode       string  `json:"country_code,omitempty""`
-	CountryCode3      string  `json:"country_code3,omitempty""`
-	IsInEuropeanUnion bool    `json:"is_in_european_union,omitempty""`
-	Region            string  `json:"region,omitempty""`
-	RegionCode        string  `json:"region_code,omitempty""`
-	City              string  `json:"city,omitempty""`
-	PostalCode        string  `json:"postal_code,omitempty""`
-	Latitude          float64 `json:"latitude,omitempty"`
-	Longitude         float64 `json:"longitude,omitempty"`
-	TimeZone          string  `json:"timezone,omitempty"`
-	Offset            int     `json:"offset,omitempty"`
-	ASN               uint    `json:"asn,omitempty"`
-	Organization      string  `json:"organization,omitempty"`
-}
-
 func ip(w http.ResponseWriter, r *http.Request) {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
