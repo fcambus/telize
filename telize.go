@@ -95,7 +95,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 		Latitude:          record.Location.Latitude,
 		Longitude:         record.Location.Longitude,
 		TimeZone:          record.Location.TimeZone,
-		Offset:            offset,
+		Offset:            &offset,
 		ASN:               asn_record.AutonomousSystemNumber,
 		Organization:      asn_record.AutonomousSystemOrganization,
 	}

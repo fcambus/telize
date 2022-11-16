@@ -28,7 +28,7 @@ type payload struct {
 	Latitude          float64 `json:"latitude,omitempty"`
 	Longitude         float64 `json:"longitude,omitempty"`
 	TimeZone          string  `json:"timezone,omitempty"`
-	Offset            int     `json:"offset,omitempty"`
+	Offset            *int    `json:"offset,omitempty"`
 	ASN               uint    `json:"asn,omitempty"`
 	Organization      string  `json:"organization,omitempty"`
 }
