@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2022-01-18
+ * Last Updated: 2022-11-16
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -24,7 +24,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"net/http/fcgi"
 	"os"
 	"time"
 )
@@ -112,12 +111,9 @@ func location(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var err error
 
-	fastcgi := flag.Bool("fastcgi", false, "Enable FastCGI mode")
 	host := flag.String("host", "127.0.0.1", "Set the server host")
 	port := flag.String("port", "8080", "Set the server port")
 	version := flag.Bool("version", false, "Display version")
-
-	mode := "HTTP"
 
 	flag.Usage = func() {
 		fmt.Println("\nUSAGE:")
@@ -128,10 +124,6 @@ func main() {
 	if *version {
 		fmt.Println("Telize 4.0.0")
 		os.Exit(0)
-	}
-
-	if *fastcgi {
-		mode = "FastCGI"
 	}
 
 	asn, err = maxminddb.Open("GeoLite2-ASN.mmdb")
@@ -153,19 +145,11 @@ func main() {
 	r.Get("/jsonip", jsonip)
 	r.Get("/location/{ip}", location)
 
-	if *fastcgi {
-		listener, _ := net.Listen("tcp", address)
 
-		if err := fcgi.Serve(listener, r); err != nil {
-			fmt.Println("\nERROR:", err)
-			os.Exit(1)
-		}
-	} else {
-		if err := http.ListenAndServe(address, r); err != nil {
-			fmt.Println("\nERROR:", err)
-			os.Exit(1)
-		}
+	if err := http.ListenAndServe(address, r); err != nil {
+		fmt.Println("\nERROR:", err)
+		os.Exit(1)
 	}
 
-	fmt.Println("Listening on ("+mode+" mode):", address)
+	fmt.Println("Listening on:", address)
 }
