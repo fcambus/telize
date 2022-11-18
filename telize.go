@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2022-11-16
+ * Last Updated: 2022-11-18
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -95,7 +95,6 @@ func location(w http.ResponseWriter, r *http.Request) {
 		Latitude:          record.Location.Latitude,
 		Longitude:         record.Location.Longitude,
 		TimeZone:          record.Location.TimeZone,
-		Offset:            &offset,
 		ASN:               asn_record.AutonomousSystemNumber,
 		Organization:      asn_record.AutonomousSystemOrganization,
 	}
@@ -103,6 +102,10 @@ func location(w http.ResponseWriter, r *http.Request) {
 	if record.Subdivisions != nil {
 		jsonip.Region = record.Subdivisions[0].Names["en"]
 		jsonip.RegionCode = record.Subdivisions[0].IsoCode
+	}
+
+	if record.Location.TimeZone != "" {
+		jsonip.Offset = &offset
 	}
 
 	jsonify(w, r, &jsonip)
