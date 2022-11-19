@@ -78,6 +78,10 @@ func jsonip(w http.ResponseWriter, r *http.Request) {
 func location(w http.ResponseWriter, r *http.Request) {
 	ip := chi.URLParam(r, "ip")
 
+	if ip == "" {
+		ip, _, _ = net.SplitHostPort(r.RemoteAddr)
+	}
+
 	ip_ := net.ParseIP(ip)
 
 	var asn_record ASN
@@ -162,6 +166,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Get("/ip", ip)
 	r.Get("/jsonip", jsonip)
+	r.Get("/location", location)
 	r.Get("/location/{ip}", location)
 
 
