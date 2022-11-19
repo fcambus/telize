@@ -39,11 +39,14 @@ var city *maxminddb.Reader
 func ip(w http.ResponseWriter, r *http.Request) {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
+	w.Header().Set("Cache-Control", "no-cache")
+
 	io.WriteString(w, ip)
 }
 
 // Return an HTTP Error along with a JSON-encoded error message
 func error_code(w http.ResponseWriter, status int, code int, message string) {
+	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Content-Type", "application/json")
 
 	if output, err := json.Marshal(ErrorCode{Code: code, Message: message}); err == nil {
@@ -56,6 +59,7 @@ func error_code(w http.ResponseWriter, status int, code int, message string) {
 func jsonify(w http.ResponseWriter, r *http.Request, payload *payload) {
 	callback := r.URL.Query().Get("callback")
 
+	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
