@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2022-11-18
+ * Last Updated: 2022-11-19
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -28,6 +28,11 @@ import (
 	"time"
 )
 
+type ErrorCode struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
 var asn *maxminddb.Reader
 var city *maxminddb.Reader
 
@@ -35,6 +40,16 @@ func ip(w http.ResponseWriter, r *http.Request) {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
 	io.WriteString(w, ip)
+}
+
+// Return an HTTP Error along with a JSON-encoded error message
+func error_code(w http.ResponseWriter, status int, code int, message string) {
+	w.Header().Set("Content-Type", "application/json")
+
+	if output, err := json.Marshal(ErrorCode{Code: code, Message: message}); err == nil {
+		w.WriteHeader(status)
+		io.WriteString(w, string(output))
+	}
 }
 
 // Generate JSON output
@@ -69,14 +84,16 @@ func location(w http.ResponseWriter, r *http.Request) {
 
 	err := asn.Lookup(ip_, &asn_record)
 	if err != nil {
-		log.Panic(err)
+		error_code(w, 400, 401, "Input string is not a valid IP address")
+		return
 	}
 
 	var record City
 
 	err = city.Lookup(ip_, &record)
 	if err != nil {
-		log.Panic(err)
+		error_code(w, 400, 401, "Input string is not a valid IP address")
+		return
 	}
 
 	jsonip := payload{
