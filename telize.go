@@ -180,7 +180,6 @@ func main() {
 	r.Get("/location/", location)
 	r.Get("/location/{ip}", location)
 
-
 	if err := http.ListenAndServe(address, r); err != nil {
 		fmt.Println("\nERROR:", err)
 		os.Exit(1)
