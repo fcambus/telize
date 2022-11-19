@@ -127,10 +127,12 @@ func location(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if record.Location.TimeZone != "" {
-		tz, _ := time.LoadLocation(record.Location.TimeZone)
-		_, offset := time.Now().In(tz).Zone()
+		tz, err := time.LoadLocation(record.Location.TimeZone)
 
-		jsonip.Offset = &offset
+		if err != nil {
+			_, offset := time.Now().In(tz).Zone()
+			jsonip.Offset = &offset
+		}
 	}
 
 	jsonify(w, r, &jsonip)
