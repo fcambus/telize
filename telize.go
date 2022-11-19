@@ -171,6 +171,8 @@ func main() {
 	r := chi.NewRouter()
 	r.Get("/ip", ip)
 	r.Get("/jsonip", jsonip)
+	r.Get("/geoip", location)
+	r.Get("/geoip/{ip}", location)
 	r.Get("/location", location)
 	r.Get("/location/{ip}", location)
 
