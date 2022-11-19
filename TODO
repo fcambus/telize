@@ -1,3 +1,2 @@
 - Investigate doing city and asn lookups in a single goroutine
 - Investigate zero downtime reloads of the DBs. Use fsnotify in a goroutine?
-- Allow trailing slashes in URLS
