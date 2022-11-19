@@ -40,6 +40,7 @@ func ip(w http.ResponseWriter, r *http.Request) {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
 	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Content-Type", "text/plain")
 
 	io.WriteString(w, ip)
 }
