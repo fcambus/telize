@@ -46,7 +46,7 @@ func ip(w http.ResponseWriter, r *http.Request) {
 }
 
 // Return an HTTP Error along with a JSON-encoded error message
-func error_code(w http.ResponseWriter, status int, code int, message string) {
+func errorCode(w http.ResponseWriter, status int, code int, message string) {
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Content-Type", "application/json")
 
@@ -93,7 +93,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 
 	err := asn.Lookup(address, &asn_record)
 	if err != nil {
-		error_code(w, 400, 401, "Input string is not a valid IP address")
+		errorCode(w, 400, 401, "Input string is not a valid IP address")
 		return
 	}
 
@@ -101,7 +101,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 
 	err = city.Lookup(address, &record)
 	if err != nil {
-		error_code(w, 400, 401, "Input string is not a valid IP address")
+		errorCode(w, 400, 401, "Input string is not a valid IP address")
 		return
 	}
 
