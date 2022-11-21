@@ -25,6 +25,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -82,6 +83,11 @@ func jsonip(w http.ResponseWriter, r *http.Request) {
 
 func location(w http.ResponseWriter, r *http.Request) {
 	ip := chi.URLParam(r, "ip")
+
+	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
+		ips := strings.Split(xff, ",")
+		ip = ips[0]
+	}
 
 	if ip == "" {
 		ip, _, _ = net.SplitHostPort(r.RemoteAddr)
