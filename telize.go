@@ -87,11 +87,11 @@ func location(w http.ResponseWriter, r *http.Request) {
 		ip, _, _ = net.SplitHostPort(r.RemoteAddr)
 	}
 
-	ip_ := net.ParseIP(ip)
+	address := net.ParseIP(ip)
 
 	var asn_record ASN
 
-	err := asn.Lookup(ip_, &asn_record)
+	err := asn.Lookup(address, &asn_record)
 	if err != nil {
 		error_code(w, 400, 401, "Input string is not a valid IP address")
 		return
@@ -99,7 +99,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 
 	var record City
 
-	err = city.Lookup(ip_, &record)
+	err = city.Lookup(address, &record)
 	if err != nil {
 		error_code(w, 400, 401, "Input string is not a valid IP address")
 		return
