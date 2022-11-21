@@ -105,7 +105,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonip := payload{
+	location := payload{
 		IP:                ip,
 		Continent:         record.Continent.Code,
 		Country:           record.Country.Names["en"],
@@ -122,18 +122,18 @@ func location(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if record.Subdivisions != nil {
-		jsonip.Region = record.Subdivisions[0].Names["en"]
-		jsonip.RegionCode = record.Subdivisions[0].IsoCode
+		location.Region = record.Subdivisions[0].Names["en"]
+		location.RegionCode = record.Subdivisions[0].IsoCode
 	}
 
 	if record.Location.TimeZone != "" {
 		if tz, err := time.LoadLocation(record.Location.TimeZone); err == nil {
 			_, offset := time.Now().In(tz).Zone()
-			jsonip.Offset = &offset
+			location.Offset = &offset
 		}
 	}
 
-	jsonify(w, r, &jsonip)
+	jsonify(w, r, &location)
 }
 
 func main() {
