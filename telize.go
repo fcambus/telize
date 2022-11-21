@@ -178,7 +178,6 @@ func main() {
 	r.Get("/location/", location)
 	r.Get("/location/{ip}", location)
 
+	fmt.Print("Listening on: http://", address + "\n")
 	log.Fatal(http.ListenAndServe(address, r))
-
-	fmt.Println("Listening on:", address)
 }
