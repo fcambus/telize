@@ -29,7 +29,7 @@ import (
 	"time"
 )
 
-type ErrorCode struct {
+type Error struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
@@ -51,7 +51,7 @@ func errorCode(w http.ResponseWriter, status int, code int, message string) {
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Content-Type", "application/json")
 
-	if output, err := json.Marshal(ErrorCode{Code: code, Message: message}); err == nil {
+	if output, err := json.Marshal(Error{Code: code, Message: message}); err == nil {
 		w.WriteHeader(status)
 		io.WriteString(w, string(output))
 	}
