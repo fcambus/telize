@@ -38,7 +38,7 @@ var asn *maxminddb.Reader
 var city *maxminddb.Reader
 
 func ip(w http.ResponseWriter, r *http.Request) {
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	ip := request_ip(r)
 
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Content-Type", "text/plain")
@@ -55,6 +55,21 @@ func errorCode(w http.ResponseWriter, status int, code int, message string) {
 		w.WriteHeader(status)
 		io.WriteString(w, string(output))
 	}
+}
+
+func request_ip(r *http.Request) string {
+	var ip string
+
+	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
+		ips := strings.Split(xff, ",")
+		ip = ips[0]
+	}
+
+	if ip == "" {
+		ip, _, _ = net.SplitHostPort(r.RemoteAddr)
+	}
+
+	return ip
 }
 
 // Generate JSON output
@@ -75,7 +90,7 @@ func jsonify(w http.ResponseWriter, r *http.Request, payload *payload) {
 }
 
 func jsonip(w http.ResponseWriter, r *http.Request) {
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	ip := request_ip(r)
 	jsonip := payload{IP: ip}
 
 	jsonify(w, r, &jsonip)
@@ -84,13 +99,8 @@ func jsonip(w http.ResponseWriter, r *http.Request) {
 func location(w http.ResponseWriter, r *http.Request) {
 	ip := chi.URLParam(r, "ip")
 
-	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
-		ips := strings.Split(xff, ",")
-		ip = ips[0]
-	}
-
 	if ip == "" {
-		ip, _, _ = net.SplitHostPort(r.RemoteAddr)
+		ip = request_ip(r)
 	}
 
 	address := net.ParseIP(ip)
