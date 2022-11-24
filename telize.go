@@ -170,13 +170,13 @@ func main() {
 		os.Exit(0)
 	}
 
-	asn, err = maxminddb.Open("GeoLite2-ASN.mmdb")
+	asn, err = maxminddb.Open("/var/db/GeoIP/GeoLite2-ASN.mmdb")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer asn.Close()
 
-	city, err = maxminddb.Open("GeoLite2-City.mmdb")
+	city, err = maxminddb.Open("/var/db/GeoIP/GeoLite2-City.mmdb")
 	if err != nil {
 		log.Fatal(err)
 	}
