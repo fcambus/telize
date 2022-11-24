@@ -29,11 +29,6 @@ import (
 	"time"
 )
 
-type Error struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-}
-
 var asn *maxminddb.Reader
 var city *maxminddb.Reader
 
@@ -48,6 +43,11 @@ func ip(w http.ResponseWriter, r *http.Request) {
 
 // Return an HTTP Error along with a JSON-encoded error message
 func errorCode(w http.ResponseWriter, status int, code int, message string) {
+	type Error struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	}
+
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Content-Type", "application/json")
 
