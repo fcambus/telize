@@ -1,0 +1,12 @@
+[Unit]
+Description=High performance IP Geolocation API
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=telize
+Restart=on-failure
+DynamicUser=yes
+
+[Install]
+WantedBy=multi-user.target
