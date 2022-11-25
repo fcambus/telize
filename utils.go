@@ -1,5 +1,5 @@
 /*
- * Telize 3.1.0
+ * Telize 4.0.0
  * Copyright (c) 2013-2022, Frederic Cambus
  * https://www.telize.com
  *
