@@ -16,81 +16,67 @@
 
 ## Description
 
-Telize is a REST API built in C with Kore allowing to get a visitor IP
-address and to query location information from any IP address. It outputs
-JSON-encoded IP geolocation data, and supports both JSON and JSONP.
+Telize is a REST API built in Go allowing to get a visitor IP address and
+to query location information from any IP address. It outputs JSON-encoded
+IP geolocation data, and supports both JSON and JSONP.
 
-Geolocation operations are performed using libmaxminddb which caches the
-database in RAM. Therefore, Telize has very minimal overhead and should
-be blazing fast.
+Geolocation operations are performed using the MaxMind DB Reader for Go
+which caches the database in RAM. Therefore, Telize has very minimal
+overhead and should be blazing fast.
 
 ## Requirements
 
-### Dependencies
+Telize requires the following Go libraries:
 
-Telize requires [Kore][1] 4.2.0+ and [libmaxminddb][2].
+- chi: lightweight, idiomatic and composable router - https://github.com/go-chi/chi
+- maxminddb-golang: MaxMind DB Reader for Go - https://github.com/oschwald/maxminddb-golang
 
 ### GeoIP2 databases
 
-Telize requires the free [GeoLite2 databases][3] from MaxMind.
+Telize requires the free [GeoLite2 databases][1] from MaxMind.
 
-The path to the `GeoLite2 City` and `GeoLite2 ASN` databases can be configured
-in `conf/build.conf` via the `GEOIP2DIR` macro, pointing to `/var/db/GeoIP`
-by default.
+Telize will look for the `GeoLite2 City` and `GeoLite2 ASN` databases in
+`/var/db/GeoIP` by default.
 
-Databases names can be specified using the `GEOIP2DB_CITY` and `GEOIP2DB_ASN`
-macros.
+## Installation
 
-## Building
+Build and install with the `go` tool, all dependencies will be automatically
+fetched and compiled:
 
-Using the kodev tool:
-
-	kodev build
-
-## Configuration
-
-By default, Telize will only listen on `127.0.0.1` and `::1`. To add more
-listeners, `bind` directives should be added in `conf/telize.conf` in the
-server blocks.
-
-## Running
-
-Using the kodev tool:
-
-	kodev run
-
-## Access logs
-
-The default Telize configuration does not have logging enabled, it must be
-configured manually. There are commented out `accesslog` directives in
-`conf/telize.conf` for each domain block.
-
-If your Telize instance produces lots of logs, [Logswan][4] might be of
-interest.
-
-## Telize and proxies
-
-Telize handles the 'X-Forwarded-For' HTTP header if present, and returns
-data for the first IP address of the list.
-
-## CORS Support (Cross-origin resource sharing)
-
-Telize has CORS enabled by default with the following policy:
-
-	Access-Control-Allow-Origin: *
-
-## Timezone offsets
-
-Since version 3.0.0, Telize now dynamically calculates timezone offsets
-(UTC time offset) and adds data to the payload.
-
-On Alpine Linux, the 'tzdata' package needs to be installed, otherwise
-localtime() will not return any data.
+	go build
+	go install telize
 
 ## Usage
 
+By default, Telize will bind on localhost, port 8080.
+
+	USAGE:
+	  -host string
+	    	Set the server host (default "127.0.0.1")
+	  -port string
+	    	Set the server port (default "8080")
+	  -version
+	    	Display version
+
+## Running Telize at boot time
+
+### Systemd unit file
+
+Telize is bundled with a systemd unit file, see: `systemd/telize.service`
+
+Copy the `systemd/telize.service` file in `/etc/systemd/system` and the Telize
+binary in `/usr/local/sbin`.
+
+To launch the daemon at startup, run:
+
+	systemctl enable telize
+
+## Making Queries
+
 For complete API documentation and usage examples, please check the
 project site.
+
+Telize supports JSONP callbacks.
 
 ### Get IP address in Plain text format
 
@@ -107,13 +93,36 @@ Calling the API endpoint without any parameter will return the visitor
 IP address:
 
 - Example (JSON): http://127.0.0.1:8080/location
-- Example (JSONP): http://127.0.0.1:8080/location?callback=getgeoip
+- Example (JSONP): http://127.0.0.1:8080/location?callback=getlocation
 
 Appending an IP address as parameter will return location information for
 the given address:
 
 - Example (JSON): http://127.0.0.1:8080/location/46.19.37.108
-- Example (JSONP): http://127.0.0.1:8080/location/46.19.37.108?callback=getgeoip
+- Example (JSONP): http://127.0.0.1:8080/location/46.19.37.108?callback=getlocation
+
+## Client Errors
+
+When incorrect user input is entered, the server returns an HTTP 400 Error
+(Bad Request), along with a JSON-encoded error message.
+
+- Code 401: Input string is not a valid IP address
+
+## Telize and proxies
+
+Telize handles the 'X-Forwarded-For' HTTP header if present, and returns
+data for the first IP address of the list.
+
+## CORS Support (Cross-origin resource sharing)
+
+Telize has CORS enabled by default with the following policy:
+
+	Access-Control-Allow-Origin: *
+
+## Timezone offsets
+
+Since version 3.0.0, Telize now dynamically calculates timezone offsets
+(UTC time offset) and adds data to the payload.
 
 ## License
 
@@ -134,7 +143,4 @@ Latest tarball release: https://www.statdns.com/telize/telize-3.1.1.tar.gz
 
 GitHub: https://github.com/fcambus/telize
 
-[1]: https://kore.io
-[2]: https://github.com/maxmind/libmaxminddb
-[3]: https://dev.maxmind.com/geoip/geoip2/geolite2/
-[4]: https://www.logswan.org
+[1]: https://dev.maxmind.com/geoip/geoip2/geolite2/
