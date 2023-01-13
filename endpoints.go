@@ -15,15 +15,16 @@
 package main
 
 import (
-	"github.com/go-chi/chi/v5"
 	"io"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func ip(w http.ResponseWriter, r *http.Request) {
-	ip := request_ip(r)
+	ip := request_ip(r) + "\n"
 
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Content-Type", "text/plain")

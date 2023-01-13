@@ -17,11 +17,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/oschwald/maxminddb-golang"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/oschwald/maxminddb-golang"
 )
 
 var asn *maxminddb.Reader
