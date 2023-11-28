@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2022-11-24
+ * Last Updated: 2023-11-28
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -68,6 +68,15 @@ func main() {
 	r.Get("/location", location)
 	r.Get("/location/", location)
 	r.Get("/location/{ip}", location)
+
+	r.Head("/ip", ip)
+	r.Head("/jsonip", jsonip)
+	r.Head("/geoip", location)
+	r.Head("/geoip/", location)
+	r.Head("/geoip/{ip}", location)
+	r.Head("/location", location)
+	r.Head("/location/", location)
+	r.Head("/location/{ip}", location)
 
 	fmt.Print("Listening on: http://", address+"\n")
 	log.Fatal(http.ListenAndServe(address, r))
