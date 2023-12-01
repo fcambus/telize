@@ -63,9 +63,9 @@ func jsonify(w http.ResponseWriter, r *http.Request, payload *payload) {
 
 	if json, err := json.Marshal(payload); err == nil {
 		if callback != "" {
-			io.WriteString(w, callback+"("+string(json)+");")
+			io.WriteString(w, callback+"("+string(json)+");\n")
 		} else {
-			io.WriteString(w, string(json))
+			io.WriteString(w, string(json)+"\n")
 		}
 	}
 }
