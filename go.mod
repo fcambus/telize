@@ -3,7 +3,7 @@ module telize
 go 1.19
 
 require (
-	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/chi/v5 v5.2.2
 	github.com/oschwald/maxminddb-golang v1.10.0
 )
 
