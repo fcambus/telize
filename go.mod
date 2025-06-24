@@ -1,10 +1,12 @@
 module telize
 
-go 1.19
+go 1.23.0
+
+toolchain go1.23.7
 
 require (
-	github.com/go-chi/chi/v5 v5.0.8
-	github.com/oschwald/maxminddb-golang v1.10.0
+	github.com/go-chi/chi/v5 v5.2.2
+	github.com/oschwald/maxminddb-golang v1.13.1
 )
 
-require golang.org/x/sys v0.0.0-20220804214406-8e32c043e418 // indirect
+require golang.org/x/sys v0.21.0 // indirect
