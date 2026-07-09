@@ -4,7 +4,7 @@
  * https://www.telize.com
  *
  * Created:      2013-08-15
- * Last Updated: 2022-11-24
+ * Last Updated: 2026-07-09
  *
  * Telize is released under the BSD 2-Clause license.
  * See LICENSE file for details.
@@ -17,8 +17,8 @@ package main
 import (
 	"github.com/go-chi/chi/v5"
 	"io"
-	"net"
 	"net/http"
+	"net/netip"
 	"time"
 )
 
@@ -45,11 +45,15 @@ func location(w http.ResponseWriter, r *http.Request) {
 		ip = request_ip(r)
 	}
 
-	address := net.ParseIP(ip)
+	address, err := netip.ParseAddr(ip)
+	if err != nil {
+		errorCode(w, 400, 401, "Input string is not a valid IP address")
+		return
+	}
 
 	var asn_record ASN
 
-	err := asn.Lookup(address, &asn_record)
+	err = asn.Lookup(address).Decode(&asn_record)
 	if err != nil {
 		errorCode(w, 400, 401, "Input string is not a valid IP address")
 		return
@@ -57,7 +61,7 @@ func location(w http.ResponseWriter, r *http.Request) {
 
 	var record City
 
-	err = city.Lookup(address, &record)
+	err = city.Lookup(address).Decode(&record)
 	if err != nil {
 		errorCode(w, 400, 401, "Input string is not a valid IP address")
 		return

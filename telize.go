@@ -18,7 +18,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	"github.com/oschwald/maxminddb-golang"
+	"github.com/oschwald/maxminddb-golang/v2"
 	"log"
 	"net/http"
 	"os"
